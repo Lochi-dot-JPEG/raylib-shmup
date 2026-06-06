@@ -1,0 +1,29 @@
+[
+  {
+    "file": "src/main.c",
+    "arguments": [
+      "/sbin/gcc",
+      "-MD",
+      "-MP",
+      "-DDEBUG",
+      "-DPLATFORM_DESKTOP",
+      "-DGRAPHICS_API_OPENGL_33",
+      "-D_GLFW_X11",
+      "-Isrc",
+      "-Iinclude",
+      "-Ibuild/external/raylib-master/src",
+      "-m64",
+      "-Wshadow",
+      "-g",
+      "-std=c17",
+      "-o",
+      "obj/x64/Debug/raylib-quickstart/main.o",
+      "-MF",
+      "obj/x64/Debug/raylib-quickstart/main.d",
+      "-c",
+      "src/main.c"
+    ],
+    "directory": "/home/lochie/Projects/raylib-shmup",
+    "output": "obj/x64/Debug/raylib-quickstart/main.o"
+  }
+]
