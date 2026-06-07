@@ -53,6 +53,7 @@ int main() {
   float bulletSpeed = 800;
   int bulletRows = 3;
   int bulletAngle = 5;
+  float backgroundSpeed = 150;
   Color bulletColor = RED;
 
   CreateWindow();
@@ -61,6 +62,7 @@ int main() {
   RenderTexture2D pixel_render_target =
       LoadRenderTexture(game_width, game_height);
   Texture wabbit = LoadTexture("wabbit_alpha.png");
+  Texture2D background = LoadTexture("background.png");
   Vector2 wabbitSize = {wabbit.width, wabbit.height};
 
   Vector2 wabbitPos = {0, 0};
@@ -81,6 +83,9 @@ int main() {
     BeginTextureMode(pixel_render_target);
     // Setup the back buffer for drawing (clear color and depth buffers)
     ClearBackground(BLACK);
+    int bgOffset = (int)(GetTime() * backgroundSpeed) % background.height;
+    DrawTexture(background, 0, bgOffset, WHITE);
+    DrawTexture(background, 0, bgOffset - game_height, WHITE);
 
     if (IsKeyDown(KEY_D)) {
       wabbitPos.x += wabbitSpeed * GetFrameTime();
@@ -112,6 +117,7 @@ int main() {
     DrawText(str, 500, 200, 20, WHITE);
 
     DrawTexture(wabbit, (int)wabbitPos.x, (int)wabbitPos.y, WHITE);
+
     EndTextureMode();
 
     DrawToWindow(pixel_render_target);
