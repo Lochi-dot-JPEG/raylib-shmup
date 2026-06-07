@@ -2,6 +2,7 @@
 #include "raymath.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
 #include "stdlib.h"
+#include "windowscale.h"
 #include <stdio.h>
 
 #define MAX_BULLETS 50000
@@ -46,8 +47,6 @@ int main() {
   // Tell the window to use vsync and work on high DPI displays
   SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
-  int windowW = 800;
-  int windowH = 600;
   Bullet *bullets = (Bullet *)RL_CALLOC(MAX_BULLETS, sizeof(Bullet));
   int bulletCount = 0;
   int bulletRadius = 10;
@@ -56,9 +55,11 @@ int main() {
   int bulletAngle = 5;
   Color bulletColor = RED;
 
-  InitWindow(windowW, windowH, "shmup");
-  SetTargetFPS(60);
+  CreateWindow();
   SearchAndSetResourceDir("resources");
+
+  RenderTexture2D pixel_render_target =
+      LoadRenderTexture(game_width, game_height);
   Texture wabbit = LoadTexture("wabbit_alpha.png");
   Vector2 wabbitSize = {wabbit.width, wabbit.height};
 
@@ -67,7 +68,7 @@ int main() {
 
   int shooting = 0;
   while (!WindowShouldClose()) {
-    moveBullets(bullets, bulletCount, GetFrameTime(), windowW, windowH);
+    moveBullets(bullets, bulletCount, GetFrameTime(), game_width, game_height);
 
     if (shooting == 3) {
       Vector2 pos = {wabbitPos.x + wabbitSize.x / 2, wabbitPos.y};
@@ -77,14 +78,9 @@ int main() {
     }
     shooting++;
 
-    // drawing
-    BeginDrawing();
-
+    BeginTextureMode(pixel_render_target);
     // Setup the back buffer for drawing (clear color and depth buffers)
     ClearBackground(BLACK);
-
-    // draw some text using the default font
-    DrawText("Hello Raylib", 200, 200, 20, WHITE);
 
     if (IsKeyDown(KEY_D)) {
       wabbitPos.x += wabbitSpeed * GetFrameTime();
@@ -98,8 +94,8 @@ int main() {
     if (IsKeyDown(KEY_S)) {
       wabbitPos.y += wabbitSpeed * GetFrameTime();
     }
-    wabbitPos.x = Clamp(wabbitPos.x, 0, windowW - wabbitSize.x);
-    wabbitPos.y = Clamp(wabbitPos.y, 0, windowH - wabbitSize.y);
+    wabbitPos.x = Clamp(wabbitPos.x, 0, game_width - wabbitSize.x);
+    wabbitPos.y = Clamp(wabbitPos.y, 0, game_height - wabbitSize.y);
 
     int drawnBullets = 0;
     // Draw bullets
@@ -116,8 +112,9 @@ int main() {
     DrawText(str, 500, 200, 20, WHITE);
 
     DrawTexture(wabbit, (int)wabbitPos.x, (int)wabbitPos.y, WHITE);
+    EndTextureMode();
 
-    EndDrawing();
+    DrawToWindow(pixel_render_target);
   }
 
   UnloadTexture(wabbit);
