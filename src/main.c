@@ -70,7 +70,8 @@ int main() {
     moveBullets(bullets, bulletCount, GetFrameTime(), windowW, windowH);
 
     if (shooting == 3) {
-      createPlayerBullets(wabbitPos, bullets, &bulletCount, bulletSpeed,
+      Vector2 pos = {wabbitPos.x + wabbitSize.x / 2, wabbitPos.y};
+      createPlayerBullets(pos, bullets, &bulletCount, bulletSpeed,
                           GetFrameTime());
       shooting = 0;
     }
