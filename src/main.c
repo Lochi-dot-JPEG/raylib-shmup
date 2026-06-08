@@ -3,17 +3,14 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
-#include "stdlib.h"
 #include "windowscale.h"
-#include <stdio.h>
 
 Vector2 bulletDirections[3] = {{0.176, -0.984}, {0, -1}, {-0.176, -0.984}};
-void createPlayerBullets(Vector2 playerPos, Bullet *bullets, int *bulletCount,
-                         float speed, float delta) {
+void createPlayerBullets(Vector2 playerPos, float speed, float delta) {
   for (int i = 0; i < 3; i++) {
     Vector2 dir = {bulletDirections[i].x * speed,
                    bulletDirections[i].y * speed};
-    createBulletAtPoint(playerPos, dir, bullets, delta);
+    createBulletAtPoint(playerPos, dir, delta);
   }
 }
 
@@ -21,19 +18,10 @@ int main() {
   // Tell the window to use vsync and work on high DPI displays
   SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
-  Bullet *bullets = (Bullet *)RL_CALLOC(MAX_BULLETS, sizeof(Bullet));
-  for (int i = 0; i < MAX_BULLETS; i++) {
-    bullets[i].disabled = true;
-  }
-  int bulletCount = 0;
-  int bulletRadius = 5;
-  float bulletSpeed = 800;
-  int bulletRows = 3;
-  int bulletAngle = 5;
   float backgroundSpeed = 150;
-  Color bulletColor = RED;
 
   enm_Init();
+  bul_Init();
 
   CreateWindow();
   SearchAndSetResourceDir("resources");
@@ -50,13 +38,13 @@ int main() {
   int shooting = 0;
   while (!WindowShouldClose()) {
 
-    moveBullets(bullets, bulletCount, GetFrameTime(), game_width, game_height);
+    moveBullets(GetFrameTime(), game_width, game_height);
     enm_Update(GetFrameTime());
+    bul_Update(GetFrameTime(), game_width, game_height);
 
     if (shooting == 3) {
       Vector2 pos = {wabbitPos.x + wabbitSize.x / 2, wabbitPos.y};
-      createPlayerBullets(pos, bullets, &bulletCount, bulletSpeed,
-                          GetFrameTime());
+      createPlayerBullets(pos, bulletSpeed, GetFrameTime());
       shooting = 0;
     }
     shooting++;
@@ -88,19 +76,7 @@ int main() {
     wabbitPos.y = Clamp(wabbitPos.y, 0, game_height - wabbitSize.y);
 
     enm_Draw();
-    int drawnBullets = 0;
-    // Draw bullets
-    for (int i = 0; i < MAX_BULLETS; i++) {
-      if (bullets[i].disabled) {
-        continue;
-      }
-      drawnBullets++;
-      Vector2 pos = bullets[i].position;
-      DrawCircle(pos.x, pos.y, bulletRadius, bullets[i].color);
-    }
-    char str[8];
-    snprintf(str, sizeof(str), "%d", drawnBullets);
-    DrawText(str, game_width - 95, 50, 20, WHITE);
+    bul_Draw();
 
     DrawTexture(wabbit, (int)wabbitPos.x, (int)wabbitPos.y, WHITE);
 
