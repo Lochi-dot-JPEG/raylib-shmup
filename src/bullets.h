@@ -25,7 +25,7 @@ void moveBullets(Bullet *bullets, int bulletCount, float delta, int winWidth,
 }
 
 void createBulletAtPoint(Vector2 origin, Vector2 velocity, Bullet *bullets,
-                         float speed, float delta) {
+                         float delta) {
   int foundIndex = 0;
   // Will override the last bullet if there are no disabled bullets
   for (int b = 0; b < MAX_BULLETS; b++) {
@@ -35,8 +35,8 @@ void createBulletAtPoint(Vector2 origin, Vector2 velocity, Bullet *bullets,
     }
   }
   bullets[foundIndex].position = origin;
-  bullets[foundIndex].velocity.x = velocity.x * speed;
-  bullets[foundIndex].velocity.y = velocity.y * speed;
+  bullets[foundIndex].velocity.x = velocity.x;
+  bullets[foundIndex].velocity.y = velocity.y;
   bullets[foundIndex].color = RED;
   bullets[foundIndex].disabled = false;
 }

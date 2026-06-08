@@ -1,4 +1,5 @@
 #include "bullets.h"
+#include "enemies.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
@@ -10,8 +11,9 @@ Vector2 bulletDirections[3] = {{0.176, -0.984}, {0, -1}, {-0.176, -0.984}};
 void createPlayerBullets(Vector2 playerPos, Bullet *bullets, int *bulletCount,
                          float speed, float delta) {
   for (int i = 0; i < 3; i++) {
-    Vector2 dir = bulletDirections[i];
-    createBulletAtPoint(playerPos, dir, bullets, speed, delta);
+    Vector2 dir = {bulletDirections[i].x * speed,
+                   bulletDirections[i].y * speed};
+    createBulletAtPoint(playerPos, dir, bullets, delta);
   }
 }
 
@@ -31,6 +33,8 @@ int main() {
   float backgroundSpeed = 150;
   Color bulletColor = RED;
 
+  enm_Init();
+
   CreateWindow();
   SearchAndSetResourceDir("resources");
 
@@ -45,7 +49,9 @@ int main() {
 
   int shooting = 0;
   while (!WindowShouldClose()) {
+
     moveBullets(bullets, bulletCount, GetFrameTime(), game_width, game_height);
+    enm_Update(GetFrameTime());
 
     if (shooting == 3) {
       Vector2 pos = {wabbitPos.x + wabbitSize.x / 2, wabbitPos.y};
@@ -62,6 +68,10 @@ int main() {
     DrawTexture(background, 0, bgOffset, WHITE);
     DrawTexture(background, 0, bgOffset - game_height, WHITE);
 
+    if (IsKeyPressed(KEY_E)) {
+      Vector2 newenmpos = {50, 50};
+      enm_New(newenmpos, 10);
+    }
     if (IsKeyDown(KEY_D)) {
       wabbitPos.x += wabbitSpeed * GetFrameTime();
     }
@@ -77,6 +87,7 @@ int main() {
     wabbitPos.x = Clamp(wabbitPos.x, 0, game_width - wabbitSize.x);
     wabbitPos.y = Clamp(wabbitPos.y, 0, game_height - wabbitSize.y);
 
+    enm_Draw();
     int drawnBullets = 0;
     // Draw bullets
     for (int i = 0; i < MAX_BULLETS; i++) {
