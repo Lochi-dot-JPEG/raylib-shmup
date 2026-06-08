@@ -1,3 +1,4 @@
+#include "bullets.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
@@ -5,50 +6,12 @@
 #include "windowscale.h"
 #include <stdio.h>
 
-#define MAX_BULLETS 10000
-
-typedef struct Bullet {
-  Vector2 position;
-  Vector2 velocity;
-  Color color;
-  bool disabled;
-} Bullet;
-
-void moveBullets(Bullet *bullets, int bulletCount, float delta, int winWidth,
-                 int winHeight) {
-  for (int i = 0; i < MAX_BULLETS; i++) {
-    Bullet b = bullets[i];
-    if (!b.disabled) {
-      bullets[i].position.x += b.velocity.x * delta;
-      bullets[i].position.y += b.velocity.y * delta;
-      if (b.position.x < 0 || b.position.x > winWidth || b.position.y < 0 ||
-          b.position.y > winHeight) {
-        bullets[i].disabled = true;
-      }
-    }
-  }
-}
-
 Vector2 bulletDirections[3] = {{0.176, -0.984}, {0, -1}, {-0.176, -0.984}};
-
-void createPlayerBullets(Vector2 origin, Bullet *bullets, int *bulletCount,
+void createPlayerBullets(Vector2 playerPos, Bullet *bullets, int *bulletCount,
                          float speed, float delta) {
   for (int i = 0; i < 3; i++) {
-
-    int foundIndex = 0;
-    for (int b = 0; b < MAX_BULLETS; b++) {
-      if (bullets[b].disabled == true) {
-        foundIndex = b;
-        break;
-      }
-    }
-
     Vector2 dir = bulletDirections[i];
-    bullets[foundIndex].position = origin;
-    bullets[foundIndex].velocity.x = dir.x * speed;
-    bullets[foundIndex].velocity.y = dir.y * speed;
-    bullets[foundIndex].color = RED;
-    bullets[foundIndex].disabled = false;
+    createBulletAtPoint(playerPos, dir, bullets, speed, delta);
   }
 }
 
@@ -126,7 +89,7 @@ int main() {
     }
     char str[8];
     snprintf(str, sizeof(str), "%d", drawnBullets);
-    DrawText(str, 500, 200, 20, WHITE);
+    DrawText(str, game_width - 95, 50, 20, WHITE);
 
     DrawTexture(wabbit, (int)wabbitPos.x, (int)wabbitPos.y, WHITE);
 
