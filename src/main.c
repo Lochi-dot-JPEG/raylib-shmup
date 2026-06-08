@@ -5,7 +5,7 @@
 #include "windowscale.h"
 #include <stdio.h>
 
-#define MAX_BULLETS 50000
+#define MAX_BULLETS 10000
 
 typedef struct Bullet {
   Vector2 position;
@@ -16,7 +16,7 @@ typedef struct Bullet {
 
 void moveBullets(Bullet *bullets, int bulletCount, float delta, int winWidth,
                  int winHeight) {
-  for (int i = 0; i < bulletCount; i++) {
+  for (int i = 0; i < MAX_BULLETS; i++) {
     Bullet b = bullets[i];
     if (!b.disabled) {
       bullets[i].position.x += b.velocity.x * delta;
@@ -28,18 +28,27 @@ void moveBullets(Bullet *bullets, int bulletCount, float delta, int winWidth,
     }
   }
 }
-Vector2 bulletDirections[3] = {{0.309, -0.951}, {0, -1}, {-0.309, -0.951}};
+
+Vector2 bulletDirections[3] = {{0.176, -0.984}, {0, -1}, {-0.176, -0.984}};
 
 void createPlayerBullets(Vector2 origin, Bullet *bullets, int *bulletCount,
                          float speed, float delta) {
   for (int i = 0; i < 3; i++) {
+
+    int foundIndex = 0;
+    for (int b = 0; b < MAX_BULLETS; b++) {
+      if (bullets[b].disabled == true) {
+        foundIndex = b;
+        break;
+      }
+    }
+
     Vector2 dir = bulletDirections[i];
-    bullets[*bulletCount].position = origin;
-    bullets[*bulletCount].velocity.x = dir.x * speed;
-    bullets[*bulletCount].velocity.y = dir.y * speed;
-    bullets[*bulletCount].color = RED;
-    bullets[*bulletCount].disabled = false;
-    *bulletCount += 1;
+    bullets[foundIndex].position = origin;
+    bullets[foundIndex].velocity.x = dir.x * speed;
+    bullets[foundIndex].velocity.y = dir.y * speed;
+    bullets[foundIndex].color = RED;
+    bullets[foundIndex].disabled = false;
   }
 }
 
@@ -48,8 +57,11 @@ int main() {
   SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
   Bullet *bullets = (Bullet *)RL_CALLOC(MAX_BULLETS, sizeof(Bullet));
+  for (int i = 0; i < MAX_BULLETS; i++) {
+    bullets[i].disabled = true;
+  }
   int bulletCount = 0;
-  int bulletRadius = 10;
+  int bulletRadius = 5;
   float bulletSpeed = 800;
   int bulletRows = 3;
   int bulletAngle = 5;
@@ -104,7 +116,7 @@ int main() {
 
     int drawnBullets = 0;
     // Draw bullets
-    for (int i = 0; i < bulletCount; i++) {
+    for (int i = 0; i < MAX_BULLETS; i++) {
       if (bullets[i].disabled) {
         continue;
       }
