@@ -42,12 +42,16 @@ int main() {
     enm_Update(GetFrameTime());
     bul_Update(GetFrameTime(), game_width, game_height);
 
-    if (shooting == 3) {
-      Vector2 pos = {wabbitPos.x + wabbitSize.x / 2, wabbitPos.y};
-      createPlayerBullets(pos, bulletSpeed, GetFrameTime());
-      shooting = 0;
+    if (IsKeyDown(KEY_J) || IsKeyDown(KEY_Z)) {
+      if (shooting == 3) {
+        Vector2 pos = {wabbitPos.x + wabbitSize.x / 2, wabbitPos.y};
+        createPlayerBullets(pos, bulletSpeed, GetFrameTime());
+        shooting = 0;
+      }
+      shooting++;
+    } else {
+      shooting = 3;
     }
-    shooting++;
 
     BeginTextureMode(pixel_render_target);
     // Setup the back buffer for drawing (clear color and depth buffers)
@@ -60,16 +64,16 @@ int main() {
       Vector2 newenmpos = {50, 50};
       enm_New(newenmpos, 10);
     }
-    if (IsKeyDown(KEY_D)) {
+    if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
       wabbitPos.x += wabbitSpeed * GetFrameTime();
     }
-    if (IsKeyDown(KEY_A)) {
+    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
       wabbitPos.x -= wabbitSpeed * GetFrameTime();
     }
-    if (IsKeyDown(KEY_W)) {
+    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
       wabbitPos.y -= wabbitSpeed * GetFrameTime();
     }
-    if (IsKeyDown(KEY_S)) {
+    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) {
       wabbitPos.y += wabbitSpeed * GetFrameTime();
     }
     wabbitPos.x = Clamp(wabbitPos.x, 0, game_width - wabbitSize.x);
