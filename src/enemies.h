@@ -6,15 +6,19 @@
 #include "raymath.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include <raymath.h>
 
 typedef struct Enemy {
   Vector2 position;
   Vector2 direction;
   int speed;
+  int bulletSpeed;
   int size;
   // int movePattern;
   int hp;
   int Sprite;
+  int shootCooldown;
+  int shootTimer;
   bool disabled;
 } Enemy;
 
@@ -45,6 +49,9 @@ void enm_New(Vector2 origin, int hp) {
   enemies[foundIndex].disabled = false;
   enemies[foundIndex].speed = 200;
   enemies[foundIndex].size = 15;
+  enemies[foundIndex].shootCooldown = GetRandomValue(10, 20);
+  enemies[foundIndex].shootTimer = GetRandomValue(0, 10);
+  enemies[foundIndex].bulletSpeed = GetRandomValue(100, 200);
   enemies[foundIndex].direction = (Vector2){1, 0.5};
 }
 
@@ -59,40 +66,42 @@ void enm_Draw() {
   }
 }
 
-void Collide_Bullets() {
-  for (int e = 0; e < MAX_ENEMIES; e++) {
-    Enemy *enemy = &enemies[e];
-    if (enemy->disabled) {
+void Collide_Bullets(Enemy *enemy) {
+  for (int i = 0; i < MAX_BULLETS; i++) {
+    Bullet *b = &bullets[i];
+    if (b->disabled || !(b->friendly)) {
       continue;
     }
-    int hitDistance = bulletRadius + enemy->size;
-    int hitDistanceSqr = hitDistance * hitDistance;
-    for (int i = 0; i < MAX_BULLETS; i++) {
-      Bullet *b = &bullets[i];
-      if (b->disabled) {
-        continue;
+    bool col = CheckCollisionCircles(b->position, bulletRadius, enemy->position,
+                                     enemy->size);
+    if (col) {
+      enemy->hp -= 1;
+      if (enemy->hp <= 0) {
+        enemy->disabled = true;
       }
-      if (Vector2DistanceSqr(b->position, enemy->position) < hitDistanceSqr) {
-        enemy->hp -= 1;
-        if (enemy->hp <= 0) {
-          enemy->disabled = true;
-        }
-        b->disabled = true;
-      }
+      b->disabled = true;
     }
   }
 }
 
 void enm_Update(float delta) {
   for (int i = 0; i < MAX_ENEMIES; i++) {
-    Enemy e = enemies[i];
-    if (e.disabled) {
+    Enemy *e = &enemies[i];
+    if (e->disabled) {
       continue;
     }
-    enemies[i].position.x += e.direction.x * e.speed * delta;
-    enemies[i].position.y += e.direction.y * e.speed * delta;
+    enemies[i].position.x += e->direction.x * e->speed * delta;
+    enemies[i].position.y += e->direction.y * e->speed * delta;
+    Collide_Bullets(e);
+    e->shootTimer--;
+    if (e->shootTimer <= 0) {
+      e->shootTimer = e->shootCooldown;
+      Vector2 bulVelo = {0, e->bulletSpeed};
+      bulVelo = Vector2Rotate(bulVelo, DEG2RAD * GetRandomValue(-10, 10));
+
+      Bullet *b = createBulletAtPoint(e->position, bulVelo, false);
+    }
   }
-  Collide_Bullets();
 }
 
 #endif

@@ -1,6 +1,7 @@
 #ifndef PLAYER_C
 #define PLAYER_C
 // Frames until a new bullet is made
+#include <stdio.h>
 #define BULLET_COOLDOWN
 #include <bullets.h>
 #include <raylib.h>
@@ -8,6 +9,7 @@
 #include <windowscale.h>
 
 static int shooting = 0;
+static int hp = 10;
 
 Texture wabbit;
 Vector2 wabbitSize;
@@ -25,12 +27,15 @@ void createPlayerBullets(Vector2 playerPos, float speed, float delta) {
   for (int i = 0; i < 3; i++) {
     Vector2 dir = {bulletDirections[i].x * speed,
                    bulletDirections[i].y * speed};
-    createBulletAtPoint(playerPos, dir, delta, true);
+    createBulletAtPoint(playerPos, dir, true);
   }
 }
 
 void ply_Draw() {
   DrawTexture(wabbit, (int)wabbitPos.x, (int)wabbitPos.y, WHITE);
+  char str[8];
+  snprintf(str, sizeof(str), "%d", hp);
+  DrawText(str, 360 - 95, 80, 20, WHITE);
 }
 
 void ply_Update() {
@@ -59,6 +64,18 @@ void ply_Update() {
   }
   wabbitPos.x = Clamp(wabbitPos.x, 0, game_width - wabbitSize.x);
   wabbitPos.y = Clamp(wabbitPos.y, 0, game_height - wabbitSize.y);
+
+  Rectangle rec = {wabbitPos.x, wabbitPos.y, wabbitSize.x, wabbitSize.y};
+  for (int b = 0; b < MAX_BULLETS; b++) {
+    if (bullets[b].disabled || bullets[b].friendly) {
+      continue;
+    }
+
+    if (CheckCollisionCircleRec(bullets[b].position, bulletRadius, rec)) {
+      bullets[b].disabled = true;
+      hp -= 1;
+    }
+  }
 }
 
 #endif
