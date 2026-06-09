@@ -73,7 +73,10 @@ void Collide_Bullets() {
         continue;
       }
       if (Vector2DistanceSqr(b->position, enemy->position) < hitDistanceSqr) {
-        enemy->disabled = true;
+        enemy->hp -= 1;
+        if (enemy->hp <= 0) {
+          enemy->disabled = true;
+        }
         b->disabled = true;
       }
     }

@@ -42,6 +42,7 @@ void moveBullets(float delta, int winWidth, int winHeight) {
 void bul_Update(float delta, int winWidth, int winHeight) {
   moveBullets(delta, winWidth, winHeight);
 }
+
 void createBulletAtPoint(Vector2 origin, Vector2 velocity, float delta) {
   int foundIndex = 0;
   // Will override the last bullet if there are no disabled bullets
