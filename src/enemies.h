@@ -1,4 +1,9 @@
+#ifndef ENEMIES_H
+#define ENEMIES_H
+#include "bullets.h"
+#include "math.h"
 #include "raylib.h"
+#include "raymath.h"
 #include "stdio.h"
 #include "stdlib.h"
 
@@ -6,6 +11,7 @@ typedef struct Enemy {
   Vector2 position;
   Vector2 direction;
   int speed;
+  int size;
   // int movePattern;
   int hp;
   int Sprite;
@@ -38,18 +44,42 @@ void enm_New(Vector2 origin, int hp) {
   enemies[foundIndex].hp = hp;
   enemies[foundIndex].disabled = false;
   enemies[foundIndex].speed = 200;
+  enemies[foundIndex].size = 15;
   enemies[foundIndex].direction = (Vector2){1, 0.5};
 }
 
 void enm_Draw() {
   for (int i = 0; i < MAX_ENEMIES; i++) {
+    // TODO figure out if using a reference here is more optimal
     Enemy e = enemies[i];
     if (e.disabled) {
       continue;
     }
-    DrawCircle((int)e.position.x, (int)e.position.y, 15, PURPLE);
+    DrawCircle((int)e.position.x, (int)e.position.y, e.size, PURPLE);
   }
 }
+
+void Collide_Bullets() {
+  for (int e = 0; e < MAX_ENEMIES; e++) {
+    Enemy *enemy = &enemies[e];
+    if (enemy->disabled) {
+      continue;
+    }
+    int hitDistance = bulletRadius + enemy->size;
+    int hitDistanceSqr = hitDistance * hitDistance;
+    for (int i = 0; i < MAX_BULLETS; i++) {
+      Bullet *b = &bullets[i];
+      if (b->disabled) {
+        continue;
+      }
+      if (Vector2DistanceSqr(b->position, enemy->position) < hitDistanceSqr) {
+        enemy->disabled = true;
+        b->disabled = true;
+      }
+    }
+  }
+}
+
 void enm_Update(float delta) {
   for (int i = 0; i < MAX_ENEMIES; i++) {
     Enemy e = enemies[i];
@@ -59,4 +89,7 @@ void enm_Update(float delta) {
     enemies[i].position.x += e.direction.x * e.speed * delta;
     enemies[i].position.y += e.direction.y * e.speed * delta;
   }
+  Collide_Bullets();
 }
+
+#endif

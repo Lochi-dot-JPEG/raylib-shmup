@@ -1,3 +1,6 @@
+#ifndef BULLETS_H
+#define BULLETS_H
+
 #include "raylib.h"
 #include "stdlib.h"
 #include <stdio.h>
@@ -11,7 +14,7 @@ typedef struct Bullet {
 
 #define MAX_BULLETS 10000
 int bulletRadius = 5;
-float bulletSpeed = 800.0f;
+float bulletSpeed = 200.0f;
 #define bulletColor RED;
 Bullet *bullets;
 
@@ -70,3 +73,5 @@ void bul_Draw() {
   snprintf(str, sizeof(str), "%d", drawnBullets);
   DrawText(str, 360 - 95, 50, 20, WHITE);
 }
+
+#endif
