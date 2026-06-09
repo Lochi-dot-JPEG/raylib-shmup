@@ -1,3 +1,5 @@
+#ifndef WINSCALE_H
+#define WINSCALE_H
 #include "raylib.h"
 
 int game_width = 360;
@@ -39,3 +41,4 @@ void DrawToWindow(RenderTexture2D source) {
   DrawFPS(GetScreenWidth() - 95, 10);
   EndDrawing();
 }
+#endif

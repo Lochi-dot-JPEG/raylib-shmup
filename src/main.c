@@ -1,18 +1,9 @@
 #include "bullets.h"
 #include "enemies.h"
+#include "player.c"
 #include "raylib.h"
-#include "raymath.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
 #include "windowscale.h"
-
-Vector2 bulletDirections[3] = {{0.176, -0.984}, {0, -1}, {-0.176, -0.984}};
-void createPlayerBullets(Vector2 playerPos, float speed, float delta) {
-  for (int i = 0; i < 3; i++) {
-    Vector2 dir = {bulletDirections[i].x * speed,
-                   bulletDirections[i].y * speed};
-    createBulletAtPoint(playerPos, dir, delta);
-  }
-}
 
 int main() {
   // Tell the window to use vsync and work on high DPI displays
@@ -20,38 +11,22 @@ int main() {
 
   float backgroundSpeed = 150;
 
-  enm_Init();
-  bul_Init();
-
   CreateWindow();
   SearchAndSetResourceDir("resources");
 
+  enm_Init();
+  bul_Init();
+  ply_Init();
   RenderTexture2D pixel_render_target =
       LoadRenderTexture(game_width, game_height);
-  Texture wabbit = LoadTexture("wabbit_alpha.png");
   Texture2D background = LoadTexture("background.png");
-  Vector2 wabbitSize = {wabbit.width, wabbit.height};
 
-  Vector2 wabbitPos = {0, 0};
-  int wabbitSpeed = 500;
-
-  int shooting = 0;
   while (!WindowShouldClose()) {
 
     moveBullets(GetFrameTime(), game_width, game_height);
     enm_Update(GetFrameTime());
     bul_Update(GetFrameTime(), game_width, game_height);
-
-    if (IsKeyDown(KEY_J) || IsKeyDown(KEY_Z)) {
-      if (shooting == 3) {
-        Vector2 pos = {wabbitPos.x + wabbitSize.x / 2, wabbitPos.y};
-        createPlayerBullets(pos, bulletSpeed, GetFrameTime());
-        shooting = 0;
-      }
-      shooting++;
-    } else {
-      shooting = 3;
-    }
+    ply_Update();
 
     BeginTextureMode(pixel_render_target);
     // Setup the back buffer for drawing (clear color and depth buffers)
@@ -64,25 +39,10 @@ int main() {
       Vector2 newenmpos = {50, 50};
       enm_New(newenmpos, 10);
     }
-    if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
-      wabbitPos.x += wabbitSpeed * GetFrameTime();
-    }
-    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
-      wabbitPos.x -= wabbitSpeed * GetFrameTime();
-    }
-    if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
-      wabbitPos.y -= wabbitSpeed * GetFrameTime();
-    }
-    if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) {
-      wabbitPos.y += wabbitSpeed * GetFrameTime();
-    }
-    wabbitPos.x = Clamp(wabbitPos.x, 0, game_width - wabbitSize.x);
-    wabbitPos.y = Clamp(wabbitPos.y, 0, game_height - wabbitSize.y);
 
     enm_Draw();
     bul_Draw();
-
-    DrawTexture(wabbit, (int)wabbitPos.x, (int)wabbitPos.y, WHITE);
+    ply_Draw();
 
     EndTextureMode();
 

@@ -10,6 +10,7 @@ typedef struct Bullet {
   Vector2 velocity;
   Color color;
   bool disabled;
+  bool friendly;
 } Bullet;
 
 #define MAX_BULLETS 10000
@@ -43,7 +44,8 @@ void bul_Update(float delta, int winWidth, int winHeight) {
   moveBullets(delta, winWidth, winHeight);
 }
 
-void createBulletAtPoint(Vector2 origin, Vector2 velocity, float delta) {
+void createBulletAtPoint(Vector2 origin, Vector2 velocity, float delta,
+                         bool friendly) {
   int foundIndex = 0;
   // Will override the last bullet if there are no disabled bullets
   for (int b = 0; b < MAX_BULLETS; b++) {
@@ -57,6 +59,7 @@ void createBulletAtPoint(Vector2 origin, Vector2 velocity, float delta) {
   bullets[foundIndex].velocity.y = velocity.y;
   bullets[foundIndex].color = RED;
   bullets[foundIndex].disabled = false;
+  bullets[foundIndex].friendly = friendly;
 }
 
 void bul_Draw() {
