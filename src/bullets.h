@@ -80,4 +80,9 @@ void bul_Draw() {
   DrawText(str, 360 - 95, 50, 20, WHITE);
 }
 
+void bul_Clear() {
+  for (int i = 0; i < MAX_BULLETS; i++) {
+    bullets[i].disabled = true;
+  }
+}
 #endif

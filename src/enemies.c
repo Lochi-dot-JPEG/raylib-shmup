@@ -120,4 +120,10 @@ bool enm_Update(float delta) {
   return any_enemies;
 }
 
+void enm_Clear() {
+  for (int i = 0; i < MAX_ENEMIES; i++) {
+    enemies[i].disabled = true;
+  }
+}
+
 #endif

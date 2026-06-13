@@ -5,6 +5,7 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <stdio.h>
+#include <waves.c>
 #include <windowscale.h>
 
 #define PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP 50
@@ -27,6 +28,7 @@ void ply_Init() {
                         game_height - PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP};
 }
 void Die() {
+  wvs_Reload_Level();
   wabbitPos = (Vector2){game_width / 2.0,
                         game_height - PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP};
   hp = max_hp;
