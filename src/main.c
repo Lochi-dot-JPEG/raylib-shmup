@@ -39,7 +39,7 @@ int main() {
 
     if (IsKeyPressed(KEY_E)) {
       Vector2 newenmpos = {50, 50};
-      enm_New(newenmpos, 10);
+      enm_New(newenmpos, "spray");
     }
 
     enm_Draw();

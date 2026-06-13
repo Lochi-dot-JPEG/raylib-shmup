@@ -13,7 +13,7 @@ typedef struct LevelWave {
   int real;
 } LevelWave;
 
-const char wave_items[] = "spray 100 50,spray 150 80";
+const char wave_items[] = "spray 100 50,shoot 250 80";
 
 #define ARRAY_LENGTH(x) (sizeof(x) / sizeof((x)[0]))
 
@@ -54,10 +54,10 @@ void LoadLevelWave(LevelWave newWave) {
 
     if (strcmp(newType, "spray") == 0) {
       printf("Creating a %s\n", newType);
-      enm_New(newPos, hp);
+      enm_New(newPos, "spray");
     } else if (strcmp(newType, "shoot") == 0) {
       printf("Creating a shoot %s\n", newType);
-      enm_New(newPos, hp);
+      enm_New(newPos, "shoot");
     } else {
       printf("Couldn't determine type %s\n", newType);
     }

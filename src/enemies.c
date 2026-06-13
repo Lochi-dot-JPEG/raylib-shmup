@@ -4,16 +4,10 @@
 #include "math.h"
 #include "raylib.h"
 #include "raymath.h"
+#include <enemytypes.h>
 #include <raymath.h>
 #include <stdio.h>
 #include <windowscale.h>
-
-typedef struct EnemyType {
-  char Name[8];
-  int MovePattern;
-  int BulletPattern;
-  int Hp;
-} EnemyType;
 
 const EnemyType EnemyA = {1, 1, 30};
 typedef struct Enemy {
@@ -44,7 +38,7 @@ void enm_Init() {
   }
 }
 
-void enm_New(Vector2 origin, int hp) {
+void enm_New(Vector2 origin, char *type) {
   int foundIndex = 0;
   // Will override the last bullet if there are no disabled bullets
   for (int e = 0; e < MAX_ENEMIES; e++) {
@@ -61,13 +55,15 @@ void enm_New(Vector2 origin, int hp) {
   } else {
     enemies[foundIndex].position.x = 50 + game_width;
   }
-  enemies[foundIndex].hp = hp;
+
+  EnemyType thisType = GetEnemyType(type);
+  enemies[foundIndex].hp = thisType.Hp;
   enemies[foundIndex].disabled = false;
-  enemies[foundIndex].speed = 200;
-  enemies[foundIndex].size = 15;
-  enemies[foundIndex].shootCooldown = GetRandomValue(10, 20);
-  enemies[foundIndex].shootTimer = GetRandomValue(0, 10);
-  enemies[foundIndex].bulletSpeed = GetRandomValue(100, 200);
+  enemies[foundIndex].speed = thisType.Speed;
+  enemies[foundIndex].size = thisType.Size;
+  enemies[foundIndex].shootCooldown = thisType.ShootCooldown;
+  enemies[foundIndex].shootTimer = thisType.ShootCooldown;
+  enemies[foundIndex].bulletSpeed = thisType.BulletSpeed;
   enemies[foundIndex].direction = (Vector2){1, 0.5};
 }
 

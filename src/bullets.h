@@ -12,6 +12,7 @@ typedef struct Bullet {
   bool disabled;
   bool friendly;
   int damage; /* TODO implement*/
+  int radius;
 } Bullet;
 
 #define MAX_BULLETS 10000
