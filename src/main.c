@@ -1,9 +1,10 @@
 #include "bullets.h"
-#include "enemies.h"
+#include "enemies.c"
 #include "player.c"
 #include "raylib.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
 #include "windowscale.h"
+#include <waves.c>
 
 int main() {
   // Tell the window to use vsync and work on high DPI displays
@@ -17,6 +18,7 @@ int main() {
   enm_Init();
   bul_Init();
   ply_Init();
+  wvs_Init();
   RenderTexture2D pixel_render_target =
       LoadRenderTexture(game_width, game_height);
   Texture2D background = LoadTexture("background.png");

@@ -1,14 +1,23 @@
-#ifndef ENEMIES_H
-#define ENEMIES_H
+#ifndef ENEMIES_C
+#define ENEMIES_C
 #include "bullets.h"
 #include "math.h"
 #include "raylib.h"
 #include "raymath.h"
-#include "stdio.h"
-#include "stdlib.h"
 #include <raymath.h>
+#include <stdio.h>
+#include <windowscale.h>
 
+typedef struct EnemyType {
+  char Name[8];
+  int MovePattern;
+  int BulletPattern;
+  int Hp;
+} EnemyType;
+
+const EnemyType EnemyA = {1, 1, 30};
 typedef struct Enemy {
+  Vector2 main_position;
   Vector2 position;
   Vector2 direction;
   int speed;
@@ -24,7 +33,7 @@ typedef struct Enemy {
 
 #define ENEMY_DEFAULTS {.disabled = false}
 
-#define MAX_ENEMIES 200
+#define MAX_ENEMIES 100
 
 Enemy *enemies;
 
@@ -44,7 +53,14 @@ void enm_New(Vector2 origin, int hp) {
       break;
     }
   }
-  enemies[foundIndex].position = (Vector2){origin.x, origin.y};
+  enemies[foundIndex].main_position = (Vector2){origin.x, origin.y};
+  enemies[foundIndex].main_position = (Vector2){origin.x, origin.y};
+  enemies[foundIndex].position.y = -50;
+  if (origin.x < game_width / 2.0) {
+    enemies[foundIndex].position.x = -50;
+  } else {
+    enemies[foundIndex].position.x = 50 + game_width;
+  }
   enemies[foundIndex].hp = hp;
   enemies[foundIndex].disabled = false;
   enemies[foundIndex].speed = 200;
@@ -90,8 +106,11 @@ void enm_Update(float delta) {
     if (e->disabled) {
       continue;
     }
-    enemies[i].position.x += e->direction.x * e->speed * delta;
-    enemies[i].position.y += e->direction.y * e->speed * delta;
+    // enemies[i].position.x += e->direction.x * e->speed * delta;
+    // enemies[i].position.y += e->direction.y * e->speed * delta;
+    enemies[i].position =
+        Vector2MoveTowards(e->position, e->main_position, e->speed * delta);
+    // printf("Enemy pos = %f, %f\n", e->position.x, e->position.y);
     Collide_Bullets(e);
     e->shootTimer--;
     if (e->shootTimer <= 0) {
