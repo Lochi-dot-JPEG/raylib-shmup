@@ -3,21 +3,25 @@
 
 #include "raylib.h"
 #include <enemies.c>
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 
 #define TYPE1 "spray";
 
 typedef struct LevelWave {
-  const char *objects;
-  int real;
+  char objects[512];
+  bool active; // Part of the current set of waves
+  bool complete;
 } LevelWave;
 
-const char wave_items[] = "spray 100 50,shoot 250 80";
+#define MAX_WAVES 256
+
+LevelWave loaded_waves[MAX_WAVES];
+
+// const char wave_items[512] = "spray 100 50,shoot 250 80";
 
 #define ARRAY_LENGTH(x) (sizeof(x) / sizeof((x)[0]))
-
-const LevelWave testwave = {wave_items};
 
 void LoadLevelWave(LevelWave newWave) {
   int objectCount = 0; // Is set by the TextSplit function
@@ -50,7 +54,6 @@ void LoadLevelWave(LevelWave newWave) {
     int newPosX = atoi(objectProperties[1]);
     int newPosY = atoi(objectProperties[2]);
     Vector2 newPos = {newPosX, newPosY};
-    int hp = 10; // TODO change based on type using a lookup
 
     if (strcmp(newType, "spray") == 0) {
       printf("Creating a %s\n", newType);
@@ -66,14 +69,50 @@ void LoadLevelWave(LevelWave newWave) {
 }
 
 // void LoadLevel(char filename[]) { LoadLevelWave(testwave); }
-void LoadLevel() {
+void LoadLevel(char *level_name) {
 
-  printf("loads level \n");
-  LoadLevelWave(testwave);
+  char *level_data = LoadFileText(level_name);
+  int line_count;
+  if (level_data == NULL) {
+    return;
+  }
+  size_t len = strlen(level_data);
+  printf("lines %s", level_data);
+  puts(level_data);
+  printf("level_data = %p\n", (void *)level_data);
+
+  char **lines = TextSplit(level_data, '\n', &line_count);
+
+  char copied_lines[line_count][512];
+  for (int i = 0; i < line_count; i++) {
+    strcpy(copied_lines[i], lines[i]);
+    printf("copied line %s\n", lines[i]);
+  }
+  for (int i = 0; i < MAX_WAVES; i++) {
+    if (i < line_count) {
+      strcpy(loaded_waves[i].objects, copied_lines[i]);
+      printf("wave %d is %s\n", i, loaded_waves[i].objects);
+    }
+    loaded_waves[i].active = i < line_count;
+  }
+
+  // It shows empty for all of these
+  for (int i = 0; i < MAX_WAVES; i++) {
+    if (i < line_count) {
+      printf("wave %d is %s\n", i, loaded_waves[i].objects);
+    }
+  }
+
+  printf("loaded level wave %s\n", loaded_waves[1].objects);
+  LoadLevelWave(loaded_waves[0]);
+  UnloadFileText(level_data);
 }
+
+// TODO
+void UnloadLevel(char *level_text) { UnloadFileText(level_text); }
 
 void wvs_Update() {}
 void wvs_NextWave() {}
-void wvs_Init() { LoadLevel(); }
+void wvs_Init() { LoadLevel("testlevel.txt"); }
 
 #endif

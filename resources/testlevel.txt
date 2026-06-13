@@ -1,0 +1,5 @@
+spray 100 50,shoot 250 80
+shoot 100 50
+spray 200 150
+shoot 100 150
+spray 10 20

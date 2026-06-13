@@ -1,6 +1,5 @@
 #ifndef ENEMYTYPES_H
 #define ENEMYTYPES_H
-#include "player.c"
 #include <stdio.h>
 #include <string.h>
 
@@ -33,7 +32,7 @@ const EnemyType EnemyTypes[] = { // Declare all types
         // shoot
         .Hp = 50,
         .Speed = 50,
-        .Size = 30,
+        .Size = 40,
         .MovePattern = 1,
         .BulletPattern = 1,
         .BulletSpeed = 100,
