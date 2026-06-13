@@ -111,8 +111,29 @@ void LoadLevel(char *level_name) {
 // TODO
 void UnloadLevel(char *level_text) { UnloadFileText(level_text); }
 
-void wvs_Update() {}
-void wvs_NextWave() {}
+void wvs_NextWave() {
+  int current_wave;
+  int found_wave = false;
+  for (current_wave = 0; current_wave < MAX_WAVES; current_wave++) {
+    if (!loaded_waves[current_wave].complete) {
+      break;
+    }
+    if (!loaded_waves[current_wave].active) {
+      printf("waves done\n");
+      return;
+    }
+  }
+  loaded_waves[current_wave].complete = true;
+  current_wave++;
+  LoadLevelWave(loaded_waves[current_wave]);
+}
+
 void wvs_Init() { LoadLevel("testlevel.txt"); }
 
+void wvs_Update(bool has_active_enemies) {
+  // TODO accomodate for dialogue waves here
+  if (!has_active_enemies) {
+    wvs_NextWave();
+  }
+}
 #endif

@@ -96,14 +96,14 @@ void Collide_Bullets(Enemy *enemy) {
   }
 }
 
-void enm_Update(float delta) {
+bool enm_Update(float delta) {
+  bool any_enemies = false;
   for (int i = 0; i < MAX_ENEMIES; i++) {
     Enemy *e = &enemies[i];
     if (e->disabled) {
       continue;
     }
-    // enemies[i].position.x += e->direction.x * e->speed * delta;
-    // enemies[i].position.y += e->direction.y * e->speed * delta;
+    any_enemies = true;
     enemies[i].position =
         Vector2MoveTowards(e->position, e->main_position, e->speed * delta);
     // printf("Enemy pos = %f, %f\n", e->position.x, e->position.y);
@@ -117,6 +117,7 @@ void enm_Update(float delta) {
       Bullet *b = createBulletAtPoint(e->position, bulVelo, false);
     }
   }
+  return any_enemies;
 }
 
 #endif

@@ -21,7 +21,7 @@ const EnemyType EnemyTypes[] = { // Declare all types
     {
         // spray
         .Hp = 5,
-        .Speed = 100,
+        .Speed = 200,
         .Size = 15,
         .MovePattern = 1,
         .BulletPattern = 1,
@@ -31,7 +31,7 @@ const EnemyType EnemyTypes[] = { // Declare all types
     {
         // shoot
         .Hp = 50,
-        .Speed = 50,
+        .Speed = 100,
         .Size = 40,
         .MovePattern = 1,
         .BulletPattern = 1,

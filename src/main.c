@@ -26,9 +26,11 @@ int main() {
   while (!WindowShouldClose()) {
 
     moveBullets(GetFrameTime(), game_width, game_height);
-    enm_Update(GetFrameTime());
+    bool active_enemies = enm_Update(GetFrameTime());
+
     bul_Update(GetFrameTime(), game_width, game_height);
     ply_Update();
+    wvs_Update(active_enemies);
 
     BeginTextureMode(pixel_render_target);
     // Setup the back buffer for drawing (clear color and depth buffers)
@@ -37,10 +39,15 @@ int main() {
     DrawTexture(background, 0, bgOffset, WHITE);
     DrawTexture(background, 0, bgOffset - game_height, WHITE);
 
+#if DEBUG
     if (IsKeyPressed(KEY_E)) {
       Vector2 newenmpos = {50, 50};
       enm_New(newenmpos, "spray");
     }
+    if (IsKeyPressed(KEY_N)) {
+      wvs_NextWave();
+    }
+#endif
 
     enm_Draw();
     bul_Draw();
