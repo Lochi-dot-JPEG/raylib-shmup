@@ -8,33 +8,33 @@ typedef struct EnemyType {
   int Speed;
   int Size;
   int MovePattern;
-  int BulletPattern;
+  int ShootPattern; // See CreateEnemyBullets for types
   float BulletSpeed;
   float ShootCooldown;
 } EnemyType;
 
 const char EnemyTypeKeys[][8] = {
-    "spray",
     "shoot",
+    "spray",
 };
 const EnemyType EnemyTypes[] = { // Declare all types
     {
-        // spray
-        .Hp = 5,
+        // shoot
+        .Hp = 15,
         .Speed = 200,
         .Size = 15,
         .MovePattern = 1,
-        .BulletPattern = 1,
+        .ShootPattern = 1,
         .BulletSpeed = 100,
         .ShootCooldown = 40,
     },
     {
-        // shoot
+        // spray
         .Hp = 50,
         .Speed = 100,
         .Size = 40,
         .MovePattern = 1,
-        .BulletPattern = 1,
+        .ShootPattern = 0,
         .BulletSpeed = 100,
         .ShootCooldown = 20,
     }};

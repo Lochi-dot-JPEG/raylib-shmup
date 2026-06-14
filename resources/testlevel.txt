@@ -1,5 +1,9 @@
 spray 100 50,shoot 250 80
+scrollstop
 shoot 100 50
+scrollstart
 spray 200 150
+scrollstop
 shoot 100 150
+scrollstart
 spray 10 20

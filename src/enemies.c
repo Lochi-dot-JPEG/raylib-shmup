@@ -15,11 +15,12 @@ typedef struct Enemy {
   Vector2 position;
   Vector2 direction;
   int speed;
-  int bulletSpeed;
   int size;
-  // int movePattern;
+  int movePattern;
   int hp;
   int Sprite;
+  int bulletSpeed;
+  int shootPattern;
   int shootCooldown;
   int shootTimer;
   bool disabled;
@@ -61,10 +62,44 @@ void enm_New(Vector2 origin, char *type) {
   enemies[foundIndex].disabled = false;
   enemies[foundIndex].speed = thisType.Speed;
   enemies[foundIndex].size = thisType.Size;
+  enemies[foundIndex].shootPattern = thisType.ShootPattern;
   enemies[foundIndex].shootCooldown = thisType.ShootCooldown;
   enemies[foundIndex].shootTimer = thisType.ShootCooldown;
   enemies[foundIndex].bulletSpeed = thisType.BulletSpeed;
   enemies[foundIndex].direction = (Vector2){1, 0.5};
+}
+
+void CreateEnemyBullets(Enemy enemy) {
+
+  // printf("shoot pattern is %d\n", enemy.shootPattern);
+  switch (enemy.shootPattern) {
+  case 0: // alternating spray
+    Vector2 down_angle = {0, 1};
+#define ALT_SPRAY_SPREAD (1 / 18.0 * PI)
+    Vector2 angles[3] = {{0, 1},
+                         Vector2Rotate(down_angle, ALT_SPRAY_SPREAD),
+                         Vector2Rotate(down_angle, -ALT_SPRAY_SPREAD)};
+    for (int i = 0; i < 3; i++) {
+      Vector2 bulVelo = {angles[i].x * enemy.bulletSpeed,
+                         angles[i].y * enemy.bulletSpeed};
+      createBulletAtPoint(enemy.position, bulVelo, false);
+    }
+
+    return;
+  case 1: // slow forward shooting
+    Vector2 bulVelo = {0, enemy.bulletSpeed};
+    bulVelo = Vector2Rotate(bulVelo, DEG2RAD * GetRandomValue(-10, 10));
+    Bullet *b = createBulletAtPoint(enemy.position, bulVelo, false);
+  case 2:
+    return;
+  case 3:
+    return;
+  case 4:
+    return;
+  default:
+    printf("Couldnt find bullet pattern %d", enemy.shootPattern);
+    return;
+  }
 }
 
 void enm_Draw() {
@@ -111,10 +146,7 @@ bool enm_Update(float delta) {
     e->shootTimer--;
     if (e->shootTimer <= 0) {
       e->shootTimer = e->shootCooldown;
-      Vector2 bulVelo = {0, e->bulletSpeed};
-      bulVelo = Vector2Rotate(bulVelo, DEG2RAD * GetRandomValue(-10, 10));
-
-      Bullet *b = createBulletAtPoint(e->position, bulVelo, false);
+      CreateEnemyBullets(*e);
     }
   }
   return any_enemies;

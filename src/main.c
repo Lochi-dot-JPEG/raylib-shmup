@@ -1,3 +1,4 @@
+#include "background.c"
 #include "bullets.h"
 #include "enemies.c"
 #include "player.c"
@@ -10,8 +11,6 @@ int main() {
   // Tell the window to use vsync and work on high DPI displays
   SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 
-  float backgroundSpeed = 150;
-
   CreateWindow();
   SearchAndSetResourceDir("resources");
 
@@ -19,9 +18,9 @@ int main() {
   bul_Init();
   ply_Init();
   wvs_Init();
+  bkg_Init();
   RenderTexture2D pixel_render_target =
       LoadRenderTexture(game_width, game_height);
-  Texture2D background = LoadTexture("background.png");
 
   while (!WindowShouldClose()) {
 
@@ -35,9 +34,6 @@ int main() {
     BeginTextureMode(pixel_render_target);
     // Setup the back buffer for drawing (clear color and depth buffers)
     ClearBackground(BLACK);
-    int bgOffset = (int)(GetTime() * backgroundSpeed) % background.height;
-    DrawTexture(background, 0, bgOffset, WHITE);
-    DrawTexture(background, 0, bgOffset - game_height, WHITE);
 
 #if DEBUG
     if (IsKeyPressed(KEY_E)) {
@@ -49,9 +45,12 @@ int main() {
     }
 #endif
 
+    bkg_Draw(GetFrameTime());
     enm_Draw();
     bul_Draw();
     ply_Draw();
+
+    wvs_DrawDialogue();
 
     EndTextureMode();
 

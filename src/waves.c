@@ -3,12 +3,14 @@
 
 #include "bullets.h"
 #include "raylib.h"
+#include <background.c>
 #include <enemies.c>
 #include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 
 #define TYPE1 "spray";
+#define MAX_WAVES 256
 
 typedef struct LevelWave {
   char objects[512];
@@ -16,14 +18,8 @@ typedef struct LevelWave {
   bool complete;
 } LevelWave;
 
-#define MAX_WAVES 256
-
 char currentLevelName[128];
 LevelWave loaded_waves[MAX_WAVES];
-
-// const char wave_items[512] = "spray 100 50,shoot 250 80";
-
-#define ARRAY_LENGTH(x) (sizeof(x) / sizeof((x)[0]))
 
 void LoadLevelWave(LevelWave newWave) {
   int objectCount = 0; // Is set by the TextSplit function
@@ -48,6 +44,16 @@ void LoadLevelWave(LevelWave newWave) {
     int propertyCount = 0; // Is set by the TextSplit function
     char **objectProperties = TextSplit(objectCopy, ' ', &propertyCount);
     if (propertyCount < 3) {
+      if (propertyCount == 1) {
+        if (strcmp("scrollstop", objectProperties[0]) == 0) {
+          scroll_background = false;
+          printf("scrollstop");
+        }
+        if (strcmp("scrollstart", objectProperties[0]) == 0) {
+          scroll_background = true;
+          printf("scrollstart");
+        }
+      }
       continue;
     }
 
@@ -72,6 +78,7 @@ void LoadLevelWave(LevelWave newWave) {
 
 // void LoadLevel(char filename[]) { LoadLevelWave(testwave); }
 void LoadLevel(char *level_name) {
+  scroll_background = true;
   strcpy(currentLevelName, level_name);
   bul_Clear();
   enm_Clear();
@@ -135,4 +142,6 @@ void wvs_Update(bool has_active_enemies) {
     wvs_NextWave();
   }
 }
+void wvs_DrawDialogue() { return; }
+
 #endif
