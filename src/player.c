@@ -9,6 +9,7 @@
 #include <windowscale.h>
 
 #define PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP 50
+#define PLAYER_BULLET_SPEED 600
 
 static int shooting = 0;
 static int hp = 10;
@@ -17,9 +18,12 @@ int max_hp = 10;
 Texture wabbit;
 Vector2 wabbit_size;
 
+bool focus_mode = false;
 Vector2 wabbitPos = {0, 0};
 int wabbitSpeed = 500;
-Vector2 bulletDirections[3] = {{0.176, -0.984}, {0, -1}, {-0.176, -0.984}};
+Vector2 bulletDirections[3] = {{0.070, -0.997}, {0, -1}, {-0.070, -0.997}};
+Vector2 focusBulletDirections[3] = {{0.035, -0.999}, {0, -1}, {-0.035, -0.999}};
+float bulletOffsets[3] = {8, 0, -8};
 
 void ply_Init() {
   wabbit = LoadTexture("wabbit_alpha.png");
@@ -34,11 +38,21 @@ void Die() {
   hp = max_hp;
 }
 
-void createPlayerBullets(Vector2 playerPos, float speed, float delta) {
+void createPlayerBullets(Vector2 playerPos, float delta, bool focused) {
   for (int i = 0; i < 3; i++) {
-    Vector2 dir = {bulletDirections[i].x * speed,
-                   bulletDirections[i].y * speed};
-    createBulletAtPoint(playerPos, dir, true);
+
+    Vector2 pos = playerPos;
+    pos.x += bulletOffsets[i];
+
+    Vector2 dir;
+    if (focused) {
+      dir = (Vector2){focusBulletDirections[i].x * PLAYER_BULLET_SPEED,
+                      focusBulletDirections[i].y * PLAYER_BULLET_SPEED};
+    } else {
+      dir = (Vector2){bulletDirections[i].x * PLAYER_BULLET_SPEED,
+                      bulletDirections[i].y * PLAYER_BULLET_SPEED};
+    }
+    createBulletAtPoint(pos, dir, true);
   }
 }
 
@@ -50,10 +64,12 @@ void ply_Draw() {
 }
 
 void ply_Update() {
+  focus_mode = IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_K);
+
   if (IsKeyDown(KEY_J) || IsKeyDown(KEY_Z)) {
     if (shooting == 5) {
       Vector2 pos = {wabbitPos.x + wabbit_size.x / 2, wabbitPos.y};
-      createPlayerBullets(pos, bulletSpeed, GetFrameTime());
+      createPlayerBullets(pos, GetFrameTime(), focus_mode);
       shooting = 0;
     }
     shooting++;
@@ -61,17 +77,19 @@ void ply_Update() {
     shooting = 5;
   }
 
+  float current_speed = focus_mode ? wabbitSpeed / 2 : wabbitSpeed;
+
   if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_D)) {
-    wabbitPos.x += wabbitSpeed * GetFrameTime();
+    wabbitPos.x += current_speed * GetFrameTime();
   }
   if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_A)) {
-    wabbitPos.x -= wabbitSpeed * GetFrameTime();
+    wabbitPos.x -= current_speed * GetFrameTime();
   }
   if (IsKeyDown(KEY_UP) || IsKeyDown(KEY_W)) {
-    wabbitPos.y -= wabbitSpeed * GetFrameTime();
+    wabbitPos.y -= current_speed * GetFrameTime();
   }
   if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) {
-    wabbitPos.y += wabbitSpeed * GetFrameTime();
+    wabbitPos.y += current_speed * GetFrameTime();
   }
   wabbitPos.x = Clamp(wabbitPos.x, 0, game_width - wabbit_size.x);
   wabbitPos.y = Clamp(wabbitPos.y, 0, game_height - wabbit_size.y);
