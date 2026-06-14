@@ -21,6 +21,16 @@ typedef struct LevelWave {
 char currentLevelName[128];
 LevelWave loaded_waves[MAX_WAVES];
 
+bool in_dialogue = false;
+char current_name[128];
+char current_line[512];
+
+void StartDialogue(char name[128], char line[512]) {
+  in_dialogue = true;
+  strcpy(current_name, name);
+  strcpy(current_line, line);
+}
+
 void LoadLevelWave(LevelWave newWave) {
   int objectCount = 0; // Is set by the TextSplit function
   char **objects = TextSplit(newWave.objects, ',', &objectCount);
@@ -48,10 +58,12 @@ void LoadLevelWave(LevelWave newWave) {
         if (strcmp("scrollstop", objectProperties[0]) == 0) {
           scroll_background = false;
           printf("scrollstop");
+          return;
         }
         if (strcmp("scrollstart", objectProperties[0]) == 0) {
           scroll_background = true;
           printf("scrollstart");
+          return;
         }
       }
       continue;
@@ -59,9 +71,9 @@ void LoadLevelWave(LevelWave newWave) {
 
     // Store properties
     char *newType = objectProperties[0];
-    int newPosX = atoi(objectProperties[1]);
-    int newPosY = atoi(objectProperties[2]);
-    Vector2 newPos = {newPosX, newPosY};
+    char *param1 = objectProperties[1];
+    char *param2 = objectProperties[2];
+    Vector2 newPos = {atoi(param1), atoi(param2)};
 
     if (strcmp(newType, "spray") == 0) {
       printf("Creating a %s\n", newType);
@@ -69,11 +81,13 @@ void LoadLevelWave(LevelWave newWave) {
     } else if (strcmp(newType, "shoot") == 0) {
       printf("Creating a shoot %s\n", newType);
       enm_New(newPos, "shoot");
+    } else if (strcmp(newType, "say") == 0) {
+      char **quotationSplit = TextSplit(objectCopy, '"', &propertyCount);
+      StartDialogue(param1, quotationSplit[1]);
     } else {
       printf("Couldn't determine type %s\n", newType);
     }
   }
-  printf("\n");
 }
 
 // void LoadLevel(char filename[]) { LoadLevelWave(testwave); }
@@ -137,11 +151,25 @@ void wvs_Init() { LoadLevel("testlevel.txt"); }
 void wvs_Reload_Level() { LoadLevel(currentLevelName); }
 
 void wvs_Update(bool has_active_enemies) {
-  // TODO accomodate for dialogue waves here
-  if (!has_active_enemies) {
+  if (!has_active_enemies && !in_dialogue) {
     wvs_NextWave();
   }
+  if (in_dialogue && IsKeyDown(KEY_ENTER)) {
+    in_dialogue = false;
+  }
 }
-void wvs_DrawDialogue() { return; }
+
+#define NAME_POS_X 16
+#define NAME_POS_Y (GAME_HEIGHT - 128)
+#define DIALOGUE_POS_X 16
+#define DIALOGUE_POS_Y (GAME_HEIGHT - 104)
+void wvs_DrawDialogue() {
+  if (!in_dialogue) {
+    return;
+  }
+  DrawText(current_name, NAME_POS_X, NAME_POS_Y, 15, BLACK);
+  // TODO wrap text using raylib example
+  DrawText(current_line, DIALOGUE_POS_X, DIALOGUE_POS_Y, 12, BLACK);
+}
 
 #endif

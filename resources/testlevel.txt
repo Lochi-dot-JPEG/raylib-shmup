@@ -1,5 +1,6 @@
 spray 100 50,shoot 250 80
 scrollstop
+say a "hello this is a test dialogue
 shoot 100 50
 scrollstart
 spray 200 150

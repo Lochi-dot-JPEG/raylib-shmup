@@ -28,13 +28,13 @@ float bulletOffsets[3] = {8, 0, -8};
 void ply_Init() {
   wabbit = LoadTexture("wabbit_alpha.png");
   wabbit_size = (Vector2){wabbit.width, wabbit.height};
-  wabbitPos = (Vector2){game_width / 2.0,
-                        game_height - PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP};
+  wabbitPos = (Vector2){GAME_WIDTH / 2.0,
+                        GAME_HEIGHT - PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP};
 }
 void Die() {
   wvs_Reload_Level();
-  wabbitPos = (Vector2){game_width / 2.0,
-                        game_height - PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP};
+  wabbitPos = (Vector2){GAME_WIDTH / 2.0,
+                        GAME_HEIGHT - PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP};
   hp = max_hp;
 }
 
@@ -91,8 +91,8 @@ void ply_Update() {
   if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) {
     wabbitPos.y += current_speed * GetFrameTime();
   }
-  wabbitPos.x = Clamp(wabbitPos.x, 0, game_width - wabbit_size.x);
-  wabbitPos.y = Clamp(wabbitPos.y, 0, game_height - wabbit_size.y);
+  wabbitPos.x = Clamp(wabbitPos.x, 0, GAME_WIDTH - wabbit_size.x);
+  wabbitPos.y = Clamp(wabbitPos.y, 0, GAME_HEIGHT - wabbit_size.y);
 
   Rectangle rec = {wabbitPos.x, wabbitPos.y, wabbit_size.x, wabbit_size.y};
   for (int b = 0; b < MAX_BULLETS; b++) {

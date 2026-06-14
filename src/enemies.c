@@ -51,10 +51,10 @@ void enm_New(Vector2 origin, char *type) {
   enemies[foundIndex].main_position = (Vector2){origin.x, origin.y};
   enemies[foundIndex].main_position = (Vector2){origin.x, origin.y};
   enemies[foundIndex].position.y = -50;
-  if (origin.x < game_width / 2.0) {
+  if (origin.x < GAME_WIDTH / 2.0) {
     enemies[foundIndex].position.x = -50;
   } else {
-    enemies[foundIndex].position.x = 50 + game_width;
+    enemies[foundIndex].position.x = 50 + GAME_WIDTH;
   }
 
   EnemyType thisType = GetEnemyType(type);

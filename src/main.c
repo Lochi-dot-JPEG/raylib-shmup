@@ -20,14 +20,14 @@ int main() {
   wvs_Init();
   bkg_Init();
   RenderTexture2D pixel_render_target =
-      LoadRenderTexture(game_width, game_height);
+      LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
 
   while (!WindowShouldClose()) {
 
-    moveBullets(GetFrameTime(), game_width, game_height);
+    moveBullets(GetFrameTime(), GAME_WIDTH, GAME_HEIGHT);
     bool active_enemies = enm_Update(GetFrameTime());
 
-    bul_Update(GetFrameTime(), game_width, game_height);
+    bul_Update(GetFrameTime(), GAME_WIDTH, GAME_HEIGHT);
     ply_Update();
     wvs_Update(active_enemies);
 

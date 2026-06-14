@@ -2,11 +2,11 @@
 #define WINSCALE_H
 #include "raylib.h"
 
-int game_width = 360;
-int game_height = 640;
+#define GAME_WIDTH 360
+#define GAME_HEIGHT 640
 
 void CreateWindow() {
-  InitWindow(game_width, game_height, "shmup");
+  InitWindow(GAME_WIDTH, GAME_HEIGHT, "shmup");
   SetWindowState(FLAG_WINDOW_RESIZABLE);
   SetTargetFPS(60);
 }
