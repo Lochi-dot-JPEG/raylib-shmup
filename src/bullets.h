@@ -20,6 +20,7 @@ int bulletRadius = 5;
 float bulletSpeed = 200.0f;
 #define bulletColor RED;
 Bullet *bullets;
+int active_bullets = 0;
 
 void bul_Init() {
   bullets = (Bullet *)RL_CALLOC(MAX_BULLETS, sizeof(Bullet));
@@ -29,9 +30,11 @@ void bul_Init() {
 }
 
 void moveBullets(float delta, int winWidth, int winHeight) {
+  active_bullets = 0;
   for (int i = 0; i < MAX_BULLETS; i++) {
     Bullet b = bullets[i];
     if (!b.disabled) {
+      active_bullets++;
       bullets[i].position.x += b.velocity.x * delta;
       bullets[i].position.y += b.velocity.y * delta;
       if (b.position.x < 0 || b.position.x > winWidth || b.position.y < 0 ||

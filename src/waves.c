@@ -143,7 +143,18 @@ void wvs_NextWave() {
   }
   loaded_waves[current_wave].complete = true;
   current_wave++;
-  LoadLevelWave(loaded_waves[current_wave]);
+
+  if (strstr(loaded_waves[current_wave].objects, "say")) {
+    if (active_bullets == 0) {
+      LoadLevelWave(loaded_waves[current_wave]);
+    } else {
+      // Revert to previous wave
+      current_wave--;
+      loaded_waves[current_wave].complete = false;
+    }
+  } else {
+    LoadLevelWave(loaded_waves[current_wave]);
+  }
 }
 
 void wvs_Init() { LoadLevel("testlevel.txt"); }
@@ -163,6 +174,7 @@ void wvs_Update(bool has_active_enemies) {
 #define NAME_POS_Y (GAME_HEIGHT - 128)
 #define DIALOGUE_POS_X 16
 #define DIALOGUE_POS_Y (GAME_HEIGHT - 104)
+
 void wvs_DrawDialogue() {
   if (!in_dialogue) {
     return;
