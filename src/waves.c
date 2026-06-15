@@ -4,6 +4,7 @@
 #include "bullets.h"
 #include "raylib.h"
 #include <background.c>
+#include <dialogue.c>
 #include <enemies.c>
 #include <stddef.h>
 #include <stdio.h>
@@ -20,16 +21,6 @@ typedef struct LevelWave {
 
 char currentLevelName[128];
 LevelWave loaded_waves[MAX_WAVES];
-
-bool in_dialogue = false;
-char current_name[128];
-char current_line[512];
-
-void StartDialogue(char name[128], char line[512]) {
-  in_dialogue = true;
-  strcpy(current_name, name);
-  strcpy(current_line, line);
-}
 
 void LoadLevelWave(LevelWave newWave) {
   int objectCount = 0; // Is set by the TextSplit function
@@ -168,20 +159,6 @@ void wvs_Update(bool has_active_enemies) {
   if (in_dialogue && IsKeyDown(KEY_ENTER)) {
     in_dialogue = false;
   }
-}
-
-#define NAME_POS_X 16
-#define NAME_POS_Y (GAME_HEIGHT - 128)
-#define DIALOGUE_POS_X 16
-#define DIALOGUE_POS_Y (GAME_HEIGHT - 104)
-
-void wvs_DrawDialogue() {
-  if (!in_dialogue) {
-    return;
-  }
-  DrawText(current_name, NAME_POS_X, NAME_POS_Y, 15, BLACK);
-  // TODO wrap text using raylib example
-  DrawText(current_line, DIALOGUE_POS_X, DIALOGUE_POS_Y, 12, BLACK);
 }
 
 #endif

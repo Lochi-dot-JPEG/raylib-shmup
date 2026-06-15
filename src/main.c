@@ -5,6 +5,7 @@
 #include "raylib.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
 #include "windowscale.h"
+#include <dialogue.c>
 #include <waves.c>
 
 int main() {
@@ -19,6 +20,7 @@ int main() {
   ply_Init();
   wvs_Init();
   bkg_Init();
+  dlg_Init();
   RenderTexture2D pixel_render_target =
       LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
 
@@ -50,7 +52,7 @@ int main() {
     bul_Draw();
     ply_Draw();
 
-    wvs_DrawDialogue();
+    dlg_Draw();
 
     EndTextureMode();
 
