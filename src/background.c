@@ -18,7 +18,7 @@ void bkg_Draw(float delta) {
   }
   int bgOffset = (int)(bgScroll) % background.height;
   DrawTexture(background, 0, bgOffset, WHITE);
-  DrawTexture(background, 0, bgOffset - GAME_HEIGHT, WHITE);
+  DrawTexture(background, 0, bgOffset - background.height, WHITE);
 }
 
 #endif

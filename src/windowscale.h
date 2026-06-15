@@ -2,8 +2,8 @@
 #define WINSCALE_H
 #include "raylib.h"
 
-#define GAME_WIDTH 360
-#define GAME_HEIGHT 640
+#define GAME_WIDTH 240
+#define GAME_HEIGHT 480
 
 void CreateWindow() {
   InitWindow(GAME_WIDTH, GAME_HEIGHT, "shmup");
