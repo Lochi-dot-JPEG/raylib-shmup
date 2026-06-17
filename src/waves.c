@@ -11,7 +11,7 @@
 #include <string.h>
 
 #define TYPE1 "spray";
-#define MAX_WAVES 256
+#define MAX_WAVES 512
 
 typedef struct LevelWave {
   char objects[512];
@@ -74,7 +74,7 @@ void LoadLevelWave(LevelWave newWave) {
       enm_New(newPos, "shoot");
     } else if (strcmp(newType, "say") == 0) {
       char **quotationSplit = TextSplit(objectCopy, '"', &propertyCount);
-      StartDialogue(param1, quotationSplit[1]);
+      StartDialogue(param1[0], quotationSplit[1]);
     } else {
       printf("Couldn't determine type %s\n", newType);
     }
@@ -148,16 +148,16 @@ void wvs_NextWave() {
   }
 }
 
-void wvs_Init() { LoadLevel("testlevel.txt"); }
+void wvs_Init() { LoadLevel("1.txt"); }
 
 void wvs_Reload_Level() { LoadLevel(currentLevelName); }
 
 void wvs_Update(bool has_active_enemies) {
+  if (in_dialogue && IsKeyPressed(KEY_ENTER)) {
+    in_dialogue = false;
+  }
   if (!has_active_enemies && !in_dialogue) {
     wvs_NextWave();
-  }
-  if (in_dialogue && IsKeyDown(KEY_ENTER)) {
-    in_dialogue = false;
   }
 }
 
