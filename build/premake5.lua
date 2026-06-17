@@ -253,6 +253,7 @@ if (downloadRaylib) then
 
         language "C"
         targetdir "../bin/%{cfg.buildcfg}"
+		defines {"MAX_TEXT_BUFFER_LENGTH=4096"}
 
 
         filter {"options:wayland=on"}

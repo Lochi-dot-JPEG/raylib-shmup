@@ -25,7 +25,7 @@ const EnemyType EnemyTypes[] = { // Declare all types
         .MovePattern = 1,
         .ShootPattern = 0,
         .BulletSpeed = 100,
-        .ShootCooldown = 20,
+        .ShootCooldown = 60,
     }};
 const int EnemyTypeSize = sizeof(EnemyTypeKeys) / sizeof(EnemyTypeKeys[0]);
 
