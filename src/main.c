@@ -1,12 +1,14 @@
-#include "background.c"
+#ifndef SHMUP_C
+#define SHMUP_C
+#include "background.h"
 #include "bullets.h"
-#include "enemies.c"
-#include "player.c"
+#include "enemies.h"
+#include "player.h"
 #include "raylib.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
 #include "windowscale.h"
-#include <dialogue.c>
-#include <waves.c>
+#include <dialogue.h>
+#include <waves.h>
 
 int main() {
   // Tell the window to use vsync and work on high DPI displays
@@ -59,7 +61,9 @@ int main() {
     DrawToWindow(pixel_render_target);
   }
 
-  UnloadTexture(wabbit);
   CloseWindow();
+  ply_Unload();
+  bkg_Unload();
   return 0;
 }
+#endif

@@ -42,8 +42,8 @@ endef
 
 ifeq ($(config),debug_x64)
 TARGETDIR = bin/Debug
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/x64/Debug/raylib-quickstart
+TARGET = $(TARGETDIR)/raylib-shmup
+OBJDIR = obj/x64/Debug/raylib-shmup
 DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -g -std=c++17
@@ -53,8 +53,8 @@ ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64
 
 else ifeq ($(config),debug_x86)
 TARGETDIR = bin/Debug
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/x86/Debug/raylib-quickstart
+TARGET = $(TARGETDIR)/raylib-shmup
+OBJDIR = obj/x86/Debug/raylib-shmup
 DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -g -std=c++17
@@ -64,8 +64,8 @@ ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32
 
 else ifeq ($(config),debug_arm64)
 TARGETDIR = bin/Debug
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/ARM64/Debug/raylib-quickstart
+TARGET = $(TARGETDIR)/raylib-shmup
+OBJDIR = obj/ARM64/Debug/raylib-shmup
 DEFINES += -DDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -g -std=c++17
@@ -75,8 +75,8 @@ ALL_LDFLAGS += $(LDFLAGS)
 
 else ifeq ($(config),release_x64)
 TARGETDIR = bin/Release
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/x64/Release/raylib-quickstart
+TARGET = $(TARGETDIR)/raylib-shmup
+OBJDIR = obj/x64/Release/raylib-shmup
 DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -Wshadow -O2 -std=c++17
@@ -86,8 +86,8 @@ ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib64 -m64 -s
 
 else ifeq ($(config),release_x86)
 TARGETDIR = bin/Release
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/x86/Release/raylib-quickstart
+TARGET = $(TARGETDIR)/raylib-shmup
+OBJDIR = obj/x86/Release/raylib-shmup
 DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m32 -Wshadow -O2 -std=c++17
@@ -97,8 +97,8 @@ ALL_LDFLAGS += $(LDFLAGS) -L/usr/lib32 -m32 -s
 
 else ifeq ($(config),release_arm64)
 TARGETDIR = bin/Release
-TARGET = $(TARGETDIR)/raylib-quickstart
-OBJDIR = obj/ARM64/Release/raylib-quickstart
+TARGET = $(TARGETDIR)/raylib-shmup
+OBJDIR = obj/ARM64/Release/raylib-shmup
 DEFINES += -DNDEBUG -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 -D_GLFW_X11
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c17
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -Wshadow -O2 -std=c++17
@@ -118,8 +118,24 @@ endif
 GENERATED :=
 OBJECTS :=
 
+GENERATED += $(OBJDIR)/background.o
+GENERATED += $(OBJDIR)/bullets.o
+GENERATED += $(OBJDIR)/dialogue.o
+GENERATED += $(OBJDIR)/enemies.o
+GENERATED += $(OBJDIR)/enemytypes.o
 GENERATED += $(OBJDIR)/main.o
+GENERATED += $(OBJDIR)/player.o
+GENERATED += $(OBJDIR)/waves.o
+GENERATED += $(OBJDIR)/windowscale.o
+OBJECTS += $(OBJDIR)/background.o
+OBJECTS += $(OBJDIR)/bullets.o
+OBJECTS += $(OBJDIR)/dialogue.o
+OBJECTS += $(OBJDIR)/enemies.o
+OBJECTS += $(OBJDIR)/enemytypes.o
 OBJECTS += $(OBJDIR)/main.o
+OBJECTS += $(OBJDIR)/player.o
+OBJECTS += $(OBJDIR)/waves.o
+OBJECTS += $(OBJDIR)/windowscale.o
 
 # Rules
 # #############################################
@@ -129,7 +145,7 @@ all: $(TARGET)
 
 $(TARGET): $(GENERATED) $(OBJECTS) $(LDDEPS) | $(TARGETDIR)
 	$(PRELINKCMDS)
-	@echo Linking raylib-quickstart
+	@echo Linking raylib-shmup
 	$(SILENT) $(LINKCMD)
 	$(POSTBUILDCMDS)
 
@@ -150,7 +166,7 @@ else
 endif
 
 clean:
-	@echo Cleaning raylib-quickstart
+	@echo Cleaning raylib-shmup
 ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -f  $(TARGET)
 	$(SILENT) rm -rf $(GENERATED)
@@ -183,7 +199,31 @@ endif
 # File Rules
 # #############################################
 
+$(OBJDIR)/background.o: src/background.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/bullets.o: src/bullets.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/dialogue.o: src/dialogue.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/enemies.o: src/enemies.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/enemytypes.o: src/enemytypes.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/main.o: src/main.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/player.o: src/player.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/waves.o: src/waves.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/windowscale.o: src/windowscale.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

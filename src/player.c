@@ -1,11 +1,10 @@
-#ifndef PLAYER_C
-#define PLAYER_C
 // Frames until a new bullet is made
+#include "bullettype.h"
 #include <bullets.h>
 #include <raylib.h>
 #include <raymath.h>
 #include <stdio.h>
-#include <waves.c>
+#include <waves.h>
 #include <windowscale.h>
 
 #define PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP 50
@@ -100,7 +99,7 @@ void ply_Update() {
       continue;
     }
 
-    if (CheckCollisionCircleRec(bullets[b].position, bulletRadius, rec)) {
+    if (CheckCollisionCircleRec(bullets[b].position, bullets[b].radius, rec)) {
       bullets[b].disabled = true;
       hp -= 1;
       if (hp < 1) {
@@ -110,4 +109,6 @@ void ply_Update() {
   }
 }
 
-#endif
+void ply_Unload() {
+  UnloadTexture(wabbit);
+} // TODO create a textures loading file

@@ -1,5 +1,3 @@
-#ifndef DIALOGUE_C
-#define DIALOGUE_C
 
 #include "raylib.h"
 #include "raymath.h"
@@ -53,4 +51,3 @@ void dlg_Draw() {
   // TODO wrap text using raylib example
   DrawText(current_line, DIALOGUE_POS_X, DIALOGUE_POS_Y, 10, WHITE);
 }
-#endif

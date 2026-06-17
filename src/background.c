@@ -1,9 +1,7 @@
-#ifndef BACKGROUND_C
-#define BACKGROUND_C
-
 #include <raylib.h>
 #include <windowscale.h>
 
+#include "background.h"
 #define BACKGROUND_SPEED 150
 
 Texture2D background;
@@ -20,5 +18,4 @@ void bkg_Draw(float delta) {
   DrawTexture(background, 0, bgOffset, WHITE);
   DrawTexture(background, 0, bgOffset - background.height, WHITE);
 }
-
-#endif
+void bkg_Unload() { UnloadTexture(background); }

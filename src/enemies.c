@@ -1,12 +1,12 @@
-#ifndef ENEMIES_C
-#define ENEMIES_C
 #include "bullets.h"
+#include "bullettype.h"
 #include "math.h"
 #include "raylib.h"
 #include "raymath.h"
 #include <enemytypes.h>
 #include <raymath.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <windowscale.h>
 
 const EnemyType EnemyA = {1, 1, 30};
@@ -25,8 +25,6 @@ typedef struct Enemy {
   int shootTimer;
   bool disabled;
 } Enemy;
-
-#define ENEMY_DEFAULTS {.disabled = false}
 
 #define MAX_ENEMIES 100
 
@@ -119,7 +117,7 @@ void Collide_Bullets(Enemy *enemy) {
     if (b->disabled || !(b->friendly)) {
       continue;
     }
-    bool col = CheckCollisionCircles(b->position, bulletRadius, enemy->position,
+    bool col = CheckCollisionCircles(b->position, b->radius, enemy->position,
                                      enemy->size);
     if (col) {
       enemy->hp -= 1;
@@ -157,5 +155,3 @@ void enm_Clear() {
     enemies[i].disabled = true;
   }
 }
-
-#endif

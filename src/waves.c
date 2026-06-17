@@ -1,23 +1,16 @@
-#ifndef WAVES_C
-#define WAVES_C
-
 #include "bullets.h"
 #include "raylib.h"
-#include <background.c>
-#include <dialogue.c>
-#include <enemies.c>
+#include "wavetype.h"
+#include <background.h>
+#include <dialogue.h>
+#include <enemies.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define TYPE1 "spray";
 #define MAX_WAVES 512
-
-typedef struct LevelWave {
-  char objects[512];
-  bool active; // Part of the current set of waves
-  bool complete;
-} LevelWave;
 
 char currentLevelName[128];
 LevelWave loaded_waves[MAX_WAVES];
@@ -73,6 +66,7 @@ void LoadLevelWave(LevelWave newWave) {
       printf("Creating a shoot %s\n", newType);
       enm_New(newPos, "shoot");
     } else if (strcmp(newType, "say") == 0) {
+      printf("object copy is %s\n", objectCopy); // Data is broken here
       char **quotationSplit = TextSplit(objectCopy, '"', &propertyCount);
       StartDialogue(param1[0], quotationSplit[1]);
     } else {
@@ -81,24 +75,26 @@ void LoadLevelWave(LevelWave newWave) {
   }
 }
 
-// void LoadLevel(char filename[]) { LoadLevelWave(testwave); }
-void LoadLevel(char *level_name) {
+void wvs_LoadLevel(char *level_name) {
   scroll_background = true;
   strcpy(currentLevelName, level_name);
   bul_Clear();
   enm_Clear();
 
   char *level_data = LoadFileText(level_name);
+  printf("level data is \n %s", level_data);
   int line_count;
   if (level_data == NULL) {
     return;
   }
+  printf("line count %d", line_count);
 
   char **lines = TextSplit(level_data, '\n', &line_count);
 
   char copied_lines[line_count][512];
   for (int i = 0; i < line_count; i++) {
     strcpy(copied_lines[i], lines[i]);
+    printf("postcopied line %s\n", copied_lines[i]);
   }
   for (int i = 0; i < MAX_WAVES; i++) {
     if (i < line_count) {
@@ -148,9 +144,9 @@ void wvs_NextWave() {
   }
 }
 
-void wvs_Init() { LoadLevel("1.txt"); }
+void wvs_Init() { wvs_LoadLevel("1.txt"); }
 
-void wvs_Reload_Level() { LoadLevel(currentLevelName); }
+void wvs_Reload_Level() { wvs_LoadLevel(currentLevelName); }
 
 void wvs_Update(bool has_active_enemies) {
   if (in_dialogue && IsKeyPressed(KEY_ENTER)) {
@@ -160,5 +156,3 @@ void wvs_Update(bool has_active_enemies) {
     wvs_NextWave();
   }
 }
-
-#endif
