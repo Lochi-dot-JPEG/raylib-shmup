@@ -3,6 +3,7 @@
 #include "math.h"
 #include "raylib.h"
 #include "raymath.h"
+#include "textures.h"
 #include <enemytypes.h>
 #include <raymath.h>
 #include <stdio.h>
@@ -24,6 +25,7 @@ typedef struct Enemy {
   int shootCooldown;
   int shootTimer;
   bool disabled;
+  Rectangle texture_rect;
 } Enemy;
 
 #define MAX_ENEMIES 100
@@ -65,6 +67,7 @@ void enm_New(Vector2 origin, char *type) {
   enemies[foundIndex].shootTimer = thisType.ShootCooldown;
   enemies[foundIndex].bulletSpeed = thisType.BulletSpeed;
   enemies[foundIndex].direction = (Vector2){1, 0.5};
+  enemies[foundIndex].texture_rect = thisType.TextureLocation;
 }
 
 void CreateEnemyBullets(Enemy enemy) {
@@ -107,7 +110,13 @@ void enm_Draw() {
     if (e.disabled) {
       continue;
     }
-    DrawCircle((int)e.position.x, (int)e.position.y, e.size, PURPLE);
+    Rectangle location_rec = {e.position.x - e.texture_rect.width / 2,
+                              e.position.y - e.texture_rect.height / 2,
+                              e.texture_rect.width, e.texture_rect.height};
+
+    DrawTexturePro(texture_map, e.texture_rect, location_rec, origin_vec, 0,
+                   WHITE);
+    // DrawCircle((int)e.position.x, (int)e.position.y, e.size, PURPLE);
   }
 }
 

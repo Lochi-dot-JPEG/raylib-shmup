@@ -125,8 +125,10 @@ GENERATED += $(OBJDIR)/enemies.o
 GENERATED += $(OBJDIR)/enemytypes.o
 GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/player.o
+GENERATED += $(OBJDIR)/textures.o
 GENERATED += $(OBJDIR)/waves.o
 GENERATED += $(OBJDIR)/windowscale.o
+GENERATED += $(OBJDIR)/word-wrap.o
 OBJECTS += $(OBJDIR)/background.o
 OBJECTS += $(OBJDIR)/bullets.o
 OBJECTS += $(OBJDIR)/dialogue.o
@@ -134,8 +136,10 @@ OBJECTS += $(OBJDIR)/enemies.o
 OBJECTS += $(OBJDIR)/enemytypes.o
 OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/player.o
+OBJECTS += $(OBJDIR)/textures.o
 OBJECTS += $(OBJDIR)/waves.o
 OBJECTS += $(OBJDIR)/windowscale.o
+OBJECTS += $(OBJDIR)/word-wrap.o
 
 # Rules
 # #############################################
@@ -220,10 +224,16 @@ $(OBJDIR)/main.o: src/main.c
 $(OBJDIR)/player.o: src/player.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/textures.o: src/textures.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/waves.o: src/waves.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/windowscale.o: src/windowscale.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/word-wrap.o: src/word-wrap.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

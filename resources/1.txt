@@ -31,10 +31,7 @@ scrollstop
 say m "You didn't even help me??
 say f "My kind isn't physically able to cause direct harm to other creatures, even if they're vampires.
 say f "Plus... don't you feel more accomplished doing it yourself?
+say m "I guess so.
 scrollstart
 spray 200 150
 spray 100 50,shoot 250 80
-shoot 100 50
-shoot 100 150
-scrollstart
-spray 10 20

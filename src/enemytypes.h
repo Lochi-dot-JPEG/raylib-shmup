@@ -1,6 +1,8 @@
 #ifndef ENEMYTYPES_H
 #define ENEMYTYPES_H
 
+#include "raylib.h"
+
 typedef struct EnemyType {
   int Hp;
   int Speed;
@@ -9,6 +11,7 @@ typedef struct EnemyType {
   int ShootPattern; // See CreateEnemyBullets for types
   float BulletSpeed;
   float ShootCooldown;
+  Rectangle TextureLocation;
 } EnemyType;
 extern const char EnemyTypeKeys[][8];
 extern const EnemyType EnemyTypes[];

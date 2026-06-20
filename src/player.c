@@ -1,5 +1,6 @@
 // Frames until a new bullet is made
 #include "bullettype.h"
+#include "textures.h"
 #include <bullets.h>
 #include <raylib.h>
 #include <raymath.h>
@@ -13,6 +14,7 @@
 static int shooting = 0;
 static int hp = 10;
 int max_hp = 10;
+Rectangle texture_location = {0, 0, 14, 24};
 
 Texture wabbit;
 Vector2 wabbit_size;
@@ -56,7 +58,11 @@ void createPlayerBullets(Vector2 playerPos, float delta, bool focused) {
 }
 
 void ply_Draw() {
-  DrawTexture(wabbit, (int)wabbitPos.x, (int)wabbitPos.y, WHITE);
+  Rectangle location_rec = {(int)wabbitPos.x - 7, (int)wabbitPos.y - 12, 14,
+                            24};
+  DrawTexturePro(texture_map, texture_location, location_rec, origin_vec, 0,
+                 WHITE);
+  // DrawTexture(texture_map, (int)wabbitPos.x, (int)wabbitPos.y, WHITE);
   char str[8];
   snprintf(str, sizeof(str), "%d", hp);
   DrawText(str, 360 - 95, 80, 20, WHITE);

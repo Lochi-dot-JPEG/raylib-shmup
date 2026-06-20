@@ -16,6 +16,7 @@ const EnemyType EnemyTypes[] = { // Declare all types
         .ShootPattern = 1,
         .BulletSpeed = 100,
         .ShootCooldown = 40,
+        .TextureLocation = {16, 0, 21, 33},
     },
     {
         // spray
@@ -26,6 +27,7 @@ const EnemyType EnemyTypes[] = { // Declare all types
         .ShootPattern = 0,
         .BulletSpeed = 100,
         .ShootCooldown = 60,
+        .TextureLocation = {47, 0, 45, 45},
     }};
 const int EnemyTypeSize = sizeof(EnemyTypeKeys) / sizeof(EnemyTypeKeys[0]);
 
