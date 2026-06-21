@@ -89,19 +89,15 @@ void wvs_LoadLevel(char *level_name) {
   }
   printf("line count %d", line_count);
 
-  char **lines = TextSplit(level_data, '\n', &line_count);
+  char **lines = LoadTextLines(level_data, &line_count);
 
-  char copied_lines[line_count][512];
-  for (int i = 0; i < line_count; i++) {
-    strcpy(copied_lines[i], lines[i]);
-    printf("postcopied line %s\n", copied_lines[i]);
-  }
   for (int i = 0; i < MAX_WAVES; i++) {
     if (i < line_count) {
-      strcpy(loaded_waves[i].objects, copied_lines[i]);
+      strcpy(loaded_waves[i].objects, lines[i]);
     }
     loaded_waves[i].active = i < line_count;
   }
+  MemFree(lines);
 
   // It shows empty for all of these
   for (int i = 0; i < MAX_WAVES; i++) {
