@@ -105,7 +105,8 @@ void ply_Update() {
       continue;
     }
 
-    if (CheckCollisionCircleRec(bullets[b].position, bullets[b].radius, rec)) {
+    if (CheckCollisionCircles(bullets[b].position, bullets[b].radius, wabbitPos,
+                              5)) {
       bullets[b].disabled = true;
       hp -= 1;
       if (hp < 1) {
