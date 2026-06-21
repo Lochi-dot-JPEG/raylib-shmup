@@ -6,7 +6,7 @@
 #define GAME_HEIGHT 480
 
 void CreateWindow() {
-  InitWindow(GAME_WIDTH, GAME_HEIGHT, "shmup");
+  InitWindow(GAME_WIDTH * 2, GAME_HEIGHT * 2, "shmup");
   SetWindowState(FLAG_WINDOW_RESIZABLE);
   SetTargetFPS(60);
 }

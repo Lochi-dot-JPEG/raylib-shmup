@@ -16,7 +16,6 @@ Rectangle PortraitPos = {0, GAME_HEIGHT - 128, 128, 128};
 
 bool in_dialogue = false;
 char current_name[128];
-Font font;
 char current_line[512];
 Texture portraits_texture;
 
@@ -34,7 +33,7 @@ void StartDialogue(char name, char line[512]) {
   strcpy(current_name, full_names[nameID]);
   strcpy(current_line, line);
 }
-void dlg_Init() { font = GetFontDefault(); }
+void dlg_Init() {}
 
 void dlg_Draw() {
   if (!in_dialogue) {
@@ -54,7 +53,8 @@ void dlg_Draw() {
   Rectangle dialogue_line_rect = {136, GAME_HEIGHT - 8 - 128,
                                   GAME_WIDTH - 16 - 128, 128};
   DrawRectangleRec(dialogue_line_rect, WHITE);
-  DrawTextBoxed(font, current_line, dialogue_line_rect, 10, 2, BLACK);
+  DrawTextBoxed(GetFontDefault(), current_line, dialogue_line_rect, 10, 2,
+                BLACK);
   // TODO wrap text using raylib example
   // DrawText(current_line, DIALOGUE_POS_X, DIALOGUE_POS_Y, 10, WHITE);
 }
