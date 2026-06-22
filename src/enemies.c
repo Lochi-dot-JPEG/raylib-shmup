@@ -26,6 +26,7 @@ typedef struct Enemy {
   int shootTimer;
   bool disabled;
   Rectangle texture_rect;
+  float time_offset;
 } Enemy;
 
 #define MAX_ENEMIES 100
@@ -66,8 +67,10 @@ void enm_New(Vector2 origin, char *type) {
   enemies[foundIndex].shootCooldown = thisType.ShootCooldown;
   enemies[foundIndex].shootTimer = thisType.ShootCooldown;
   enemies[foundIndex].bulletSpeed = thisType.BulletSpeed;
+  enemies[foundIndex].movePattern = thisType.MovePattern;
   enemies[foundIndex].direction = (Vector2){1, 0.5};
   enemies[foundIndex].texture_rect = thisType.TextureLocation;
+  enemies[foundIndex].time_offset = (float)GetRandomValue(0, 4000) * 0.01;
 }
 
 void CreateEnemyBullets(Enemy enemy) {
@@ -140,15 +143,30 @@ void Collide_Bullets(Enemy *enemy) {
 
 bool enm_Update(float delta) {
   bool any_enemies = false;
+  float game_time = GetTime();
   for (int i = 0; i < MAX_ENEMIES; i++) {
     Enemy *e = &enemies[i];
     if (e->disabled) {
       continue;
     }
     any_enemies = true;
+    float enemy_offset_time = game_time + e->time_offset;
+
+    Vector2 target_position = e->main_position;
+    switch (e->movePattern) {
+    case 0:
+      break;
+    case 1:
+      target_position.x += sinf(enemy_offset_time * 4) * 24;
+      break;
+    case 2:
+      target_position.x += sinf(enemy_offset_time * 2) * 24;
+      target_position.y += cosf(enemy_offset_time * 2) * 24;
+      break;
+    }
+
     enemies[i].position =
-        Vector2MoveTowards(e->position, e->main_position, e->speed * delta);
-    // printf("Enemy pos = %f, %f\n", e->position.x, e->position.y);
+        Vector2MoveTowards(e->position, target_position, e->speed * delta);
     Collide_Bullets(e);
     e->shootTimer--;
     if (e->shootTimer <= 0) {
