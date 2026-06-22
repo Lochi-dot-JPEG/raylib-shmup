@@ -1,4 +1,5 @@
 #include "bullets.h"
+#include "player.h"
 #include "raylib.h"
 #include "wavetype.h"
 #include <background.h>
@@ -47,6 +48,14 @@ void LoadLevelWave(LevelWave newWave) {
         if (strcmp("scrollstart", objectProperties[0]) == 0) {
           scroll_background = true;
           printf("scrollstart");
+          return;
+        }
+        if (strcmp("disallowshoot", objectProperties[0]) == 0) {
+          can_shoot = false;
+          return;
+        }
+        if (strcmp("allowshoot", objectProperties[0]) == 0) {
+          can_shoot = true;
           return;
         }
       }

@@ -13,6 +13,7 @@
 
 static int shooting = 0;
 static int hp = 10;
+bool can_shoot = true;
 int max_hp = 10;
 Rectangle texture_location = {0, 0, 14, 24};
 
@@ -71,15 +72,17 @@ void ply_Draw() {
 void ply_Update() {
   focus_mode = IsKeyDown(KEY_LEFT_SHIFT) || IsKeyDown(KEY_K);
 
-  if (IsKeyDown(KEY_J) || IsKeyDown(KEY_Z)) {
-    if (shooting == 5) {
-      Vector2 pos = {wabbitPos.x + wabbit_size.x / 2, wabbitPos.y};
-      createPlayerBullets(pos, GetFrameTime(), focus_mode);
-      shooting = 0;
+  if (can_shoot) {
+    if (IsKeyDown(KEY_J) || IsKeyDown(KEY_Z)) {
+      if (shooting == 5) {
+        Vector2 pos = {wabbitPos.x + wabbit_size.x / 2, wabbitPos.y};
+        createPlayerBullets(pos, GetFrameTime(), focus_mode);
+        shooting = 0;
+      }
+      shooting++;
+    } else {
+      shooting = 5;
     }
-    shooting++;
-  } else {
-    shooting = 5;
   }
 
   float current_speed = focus_mode ? wabbitSpeed / 2 : wabbitSpeed;

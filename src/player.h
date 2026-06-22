@@ -10,6 +10,8 @@
 #include <waves.h>
 #include <windowscale.h>
 
+extern bool can_shoot;
+
 void ply_Init();
 void ply_Draw();
 void ply_Update();

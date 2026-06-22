@@ -1,3 +1,4 @@
+disallowshoot
 scrollstop
 say f "Hello???
 say f "Wake up!!
@@ -24,14 +25,17 @@ say m "Can you kill things with your little magic wand?
 say f "No. I don't have magic for fighting people. You can take this blaster though.
 say f "Watch out there's a hoard of vampires approaching!
 say f "Press z or j to shoot, and arrow keys or wasd to move
+allowshoot
 shoot 100 50
 shoot 140 50,shoot 200 80
 shoot 80 60,shoot 210 80
 scrollstop
+disallowshoot
 say m "You didn't even help me??
 say f "My kind isn't physically able to cause direct harm to other creatures, even if they're vampires.
 say f "Plus... don't you feel more accomplished doing it yourself?
 say m "I guess so.
+allowshoot
 scrollstart
 spray 200 150
 spray 100 50,shoot 250 80
