@@ -2,10 +2,7 @@
 #include "enemytypes.h"
 #include <stdio.h>
 #include <string.h>
-const char EnemyTypeKeys[][8] = {
-    "shoot",
-    "spray",
-};
+const char EnemyTypeKeys[][8] = {"shoot", "spray", "dart"};
 const EnemyType EnemyTypes[] = { // Declare all types
     {
         // shoot
@@ -28,6 +25,17 @@ const EnemyType EnemyTypes[] = { // Declare all types
         .BulletSpeed = 100,
         .ShootCooldown = 60,
         .TextureLocation = {47, 0, 45, 45},
+    },
+    {
+        // dart
+        .Hp = 15,
+        .Speed = 50,
+        .Size = 15,
+        .MovePattern = 3,
+        .ShootPattern = 1,
+        .BulletSpeed = 100,
+        .ShootCooldown = 40,
+        .TextureLocation = {16, 0, 21, 33},
     }};
 const int EnemyTypeSize = sizeof(EnemyTypeKeys) / sizeof(EnemyTypeKeys[0]);
 
@@ -37,6 +45,6 @@ EnemyType GetEnemyType(char *type) {
       return EnemyTypes[i];
     }
   }
-  printf("Couldn't find type %s, using %s", type, EnemyTypeKeys[0]);
+  printf("Couldn't find enemy type %s, using %s\n", type, EnemyTypeKeys[0]);
   return EnemyTypes[0];
 }

@@ -1,12 +1,9 @@
-#ifndef WINSCALE_H
-#define WINSCALE_H
 #include "raylib.h"
 
-#define GAME_WIDTH 240
-#define GAME_HEIGHT 480
+#include "windowscale.h"
 
 void CreateWindow() {
-  InitWindow(GAME_WIDTH * 2, GAME_HEIGHT * 2, "shmup");
+  InitWindow(GAME_WIDTH * 2, GAME_HEIGHT * 2, GAME_NAME);
   SetWindowState(FLAG_WINDOW_RESIZABLE);
   SetTargetFPS(60);
 }
@@ -41,4 +38,3 @@ void DrawToWindow(RenderTexture2D source) {
   DrawFPS(GetScreenWidth() - 95, 10);
   EndDrawing();
 }
-#endif

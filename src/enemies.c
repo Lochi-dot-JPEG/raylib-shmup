@@ -8,6 +8,7 @@
 #include <raymath.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <windowscale.h>
 
 const EnemyType EnemyA = {1, 1, 30};
@@ -52,10 +53,19 @@ void enm_New(Vector2 origin, char *type) {
   enemies[foundIndex].main_position = (Vector2){origin.x, origin.y};
   enemies[foundIndex].main_position = (Vector2){origin.x, origin.y};
   enemies[foundIndex].position.y = -50;
-  if (origin.x < GAME_WIDTH / 2.0) {
-    enemies[foundIndex].position.x = -50;
+  if (strcmp(type, "dart") != 0) {
+    if (origin.x < GAME_WIDTH / 2.0) {
+      enemies[foundIndex].position.x = -50;
+    } else {
+      enemies[foundIndex].position.x = 50 + GAME_WIDTH;
+    }
   } else {
-    enemies[foundIndex].position.x = 50 + GAME_WIDTH;
+    if (origin.x < GAME_WIDTH / 2.0) {
+      enemies[foundIndex].position.x = origin.x - 20;
+    } else {
+      enemies[foundIndex].position.x = origin.x + 20;
+    }
+    // enemies[foundIndex].position.x = origin.x;
   }
 
   EnemyType thisType = GetEnemyType(type);
@@ -162,6 +172,13 @@ bool enm_Update(float delta) {
     case 2:
       target_position.x += sinf(enemy_offset_time * 2) * 24;
       target_position.y += cosf(enemy_offset_time * 2) * 24;
+      break;
+    case 3:
+      e->main_position.y += delta * e->speed;
+      if (e->main_position.y > GAME_HEIGHT + 16) {
+        e->disabled = true;
+        printf("disblaed");
+      }
       break;
     }
 

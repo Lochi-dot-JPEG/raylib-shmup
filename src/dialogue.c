@@ -1,15 +1,17 @@
 
+#include "colors.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "stdio.h"
 #include "textures.h"
+#include "windowscale.h"
 #include "word-wrap.h"
 #include <namemappings.h>
 #include <string.h>
 #include <windowscale.h>
 
 #define NAME_POS_X 16
-#define NAME_POS_Y (GAME_HEIGHT - 128)
+#define NAME_POS_Y (GAME_HEIGHT - 128 - 24)
 #define DIALOGUE_POS_X 16
 #define DIALOGUE_POS_Y (GAME_HEIGHT - 104)
 Rectangle PortraitPos = {0, GAME_HEIGHT - 128, 128, 128};
@@ -50,11 +52,13 @@ void dlg_Draw() {
   DrawTexturePro(texture_map, SourceRect, PortraitPos, Vector2Zero(), 0, WHITE);
   DrawText(current_name, NAME_POS_X, NAME_POS_Y, 20, WHITE);
 
-  Rectangle dialogue_line_rect = {136, GAME_HEIGHT - 8 - 128,
-                                  GAME_WIDTH - 16 - 128, 128};
-  DrawRectangleRec(dialogue_line_rect, WHITE);
+  Rectangle dialogue_back_rect = {128, GAME_HEIGHT - 128, GAME_WIDTH - 128,
+                                  128};
+  DrawRectangleRec(dialogue_back_rect, background_color);
+  Rectangle dialogue_line_rect = {136, GAME_HEIGHT - 120, GAME_WIDTH - 16 - 128,
+                                  128};
   DrawTextBoxed(GetFontDefault(), current_line, dialogue_line_rect, 10, 2,
-                BLACK);
+                text_color);
   // TODO wrap text using raylib example
   // DrawText(current_line, DIALOGUE_POS_X, DIALOGUE_POS_Y, 10, WHITE);
 }

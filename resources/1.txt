@@ -2,6 +2,9 @@ disallowshoot
 scrollstop
 say f "Hello???
 say f "Wake up!!
+allowshoot
+dart 100 50
+disallowshoot
 say m "What's happening here? Who are you?
 say f "I'm Finkly. What you would call a fairy.
 say f "You've been rotting in your house for a week straight...

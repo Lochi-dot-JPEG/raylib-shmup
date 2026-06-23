@@ -120,6 +120,7 @@ OBJECTS :=
 
 GENERATED += $(OBJDIR)/background.o
 GENERATED += $(OBJDIR)/bullets.o
+GENERATED += $(OBJDIR)/colors.o
 GENERATED += $(OBJDIR)/dialogue.o
 GENERATED += $(OBJDIR)/enemies.o
 GENERATED += $(OBJDIR)/enemytypes.o
@@ -131,6 +132,7 @@ GENERATED += $(OBJDIR)/windowscale.o
 GENERATED += $(OBJDIR)/word-wrap.o
 OBJECTS += $(OBJDIR)/background.o
 OBJECTS += $(OBJDIR)/bullets.o
+OBJECTS += $(OBJDIR)/colors.o
 OBJECTS += $(OBJDIR)/dialogue.o
 OBJECTS += $(OBJDIR)/enemies.o
 OBJECTS += $(OBJDIR)/enemytypes.o
@@ -177,7 +179,7 @@ ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -rf $(OBJDIR)
 else
 	$(SILENT) if exist $(subst /,\\,$(TARGET)) del $(subst /,\\,$(TARGET))
-	$(SILENT) if exist $(subst /,\\,$(GENERATED)) del /s /q $(subst /,\\,$(GENERATED))
+	$(SILENT) $(foreach f,$(subst /,\\,$(GENERATED)),if exist $(f) del /s /q $(f) >nul &)
 	$(SILENT) if exist $(subst /,\\,$(OBJDIR)) rmdir /s /q $(subst /,\\,$(OBJDIR))
 endif
 
@@ -207,6 +209,9 @@ $(OBJDIR)/background.o: src/background.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/bullets.o: src/bullets.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/colors.o: src/colors.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/dialogue.o: src/dialogue.c

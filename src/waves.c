@@ -74,12 +74,15 @@ void LoadLevelWave(LevelWave newWave) {
     } else if (strcmp(newType, "shoot") == 0) {
       printf("Creating a shoot %s\n", newType);
       enm_New(newPos, "shoot");
+    } else if (strcmp(newType, "dart") == 0) {
+      printf("Creating a shoot %s\n", newType);
+      enm_New(newPos, "dart");
     } else if (strcmp(newType, "say") == 0) {
       printf("object copy is %s\n", objectCopy); // Data is broken here
       char **quotationSplit = TextSplit(objectCopy, '"', &propertyCount);
       StartDialogue(param1[0], quotationSplit[1]);
     } else {
-      printf("Couldn't determine type %s\n", newType);
+      printf("Couldn't determine command type %s\n", newType);
     }
   }
 }

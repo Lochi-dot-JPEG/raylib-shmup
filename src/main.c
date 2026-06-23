@@ -2,6 +2,7 @@
 #define SHMUP_C
 #include "background.h"
 #include "bullets.h"
+#include "colors.h"
 #include "enemies.h"
 #include "player.h"
 #include "raylib.h"
@@ -13,6 +14,7 @@
 #include <dialogue.h>
 #include <stdio.h>
 #include <waves.h>
+
 RenderTexture2D pixel_render_target;
 
 #define BUTTON_GAP 16
@@ -35,7 +37,7 @@ void Tutorial() {
 #define TUTORIAL                                                               \
   "THis is the tutorial textTHis is the tutorial textTHis is the tutorial "    \
   "textTHis is the tutorial text....THis is the tutorial text."
-    DrawTextBoxed(GetFontDefault(), TUTORIAL, tutorial_rect, 10, 2, WHITE);
+    DrawTextBoxed(GetFontDefault(), TUTORIAL, tutorial_rect, 10, 2, text_color);
     EndTextureMode();
     DrawToWindow(pixel_render_target);
   }
@@ -44,14 +46,13 @@ int TitleScreen() {
   bool unpressed = false;
   const char *buttons[BUTTON_COUNT] = {"Level 1",    "Level 2",  "Level 3",
                                        "Fullscreen", "Tutorial", "Quit"};
-  printf("title\n");
 
   while (!WindowShouldClose()) {
-    printf("title draw\n");
 
     BeginTextureMode(pixel_render_target);
-    ClearBackground(GRAY);
-    DrawText("Game name", 16, 16, 32, WHITE);
+    ClearBackground(background_color);
+    DrawText("Twilight", 16, 16, 32, text_color);
+    DrawText("Apocalypse", 16, 48, 32, text_color);
     if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) {
       title_selected = Clamp(title_selected - 1, 0, BUTTON_COUNT - 1);
     }
@@ -66,8 +67,9 @@ int TitleScreen() {
     }
 
     for (int i = 0; i < BUTTON_COUNT; i++) {
-      Color draw_color = (title_selected == i) ? RED : WHITE;
-      DrawText(buttons[i], 16, 64 + BUTTON_GAP * i, 20, draw_color);
+      Color draw_color =
+          (title_selected == i) ? selected_text_color : text_color;
+      DrawText(buttons[i], 16, 96 + BUTTON_GAP * i, 20, draw_color);
     }
     EndTextureMode();
     DrawToWindow(pixel_render_target);
@@ -113,7 +115,7 @@ int main() {
 
   CreateWindow();
   SearchAndSetResourceDir("resources");
-
+  col_Init();
   enm_Init();
   bul_Init();
   ply_Init();
