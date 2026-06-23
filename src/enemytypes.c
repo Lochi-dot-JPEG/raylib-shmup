@@ -29,7 +29,7 @@ const EnemyType EnemyTypes[] = { // Declare all types
     {
         // dart
         .Hp = 15,
-        .Speed = 50,
+        .Speed = 150,
         .Size = 15,
         .MovePattern = 3,
         .ShootPattern = 1,

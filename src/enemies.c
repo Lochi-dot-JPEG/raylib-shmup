@@ -175,11 +175,11 @@ bool enm_Update(float delta) {
       break;
     case 3:
       e->main_position.y += delta * e->speed;
-      if (e->main_position.y > GAME_HEIGHT + 16) {
-        e->disabled = true;
-        printf("disblaed");
-      }
       break;
+    }
+    if (e->position.y > GAME_HEIGHT + 16) {
+      e->disabled = true;
+      printf("disabled");
     }
 
     enemies[i].position =
