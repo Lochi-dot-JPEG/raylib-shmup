@@ -77,6 +77,18 @@ int TitleScreen() {
   return -1;
 }
 
+void LevelEnd() {
+  int frames = 0;
+  while (frames < 60) {
+    frames++;
+    BeginTextureMode(pixel_render_target);
+    ClearBackground(background_color);
+    DrawText("Level", 16, 16, 32, text_color);
+    DrawText("End", 16, 48, 32, text_color);
+    EndTextureMode();
+    DrawToWindow(pixel_render_target);
+  }
+}
 // TODO use this
 void PlayLevel(char *levelname) {
   wvs_LoadLevel(levelname);
@@ -106,7 +118,11 @@ void PlayLevel(char *levelname) {
     ply_DrawUI();
     EndTextureMode();
     DrawToWindow(pixel_render_target);
+    if (IsKeyPressed(KEY_ESCAPE)) {
+      done_looping = true;
+    }
   }
+  LevelEnd();
 }
 
 int main() {
@@ -125,6 +141,7 @@ int main() {
   tex_Init();
   pixel_render_target = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
 
+  SetExitKey(KEY_F1);
   while (!WindowShouldClose()) {
     int title_result = TitleScreen();
     switch (title_result) {
