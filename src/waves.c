@@ -12,7 +12,7 @@
 
 #define TYPE1 "spray";
 #define MAX_WAVES 512
-
+bool done_looping = true;
 char currentLevelName[128];
 LevelWave loaded_waves[MAX_WAVES];
 
@@ -88,6 +88,7 @@ void LoadLevelWave(LevelWave newWave) {
 }
 
 void wvs_LoadLevel(char *level_name) {
+  done_looping = false;
   scroll_background = true;
   strcpy(currentLevelName, level_name);
   bul_Clear();
@@ -104,8 +105,14 @@ void wvs_LoadLevel(char *level_name) {
   char **lines = LoadTextLines(level_data, &line_count);
 
   for (int i = 0; i < MAX_WAVES; i++) {
+    loaded_waves[i].active = false;
+    loaded_waves[i].complete = true;
+  }
+
+  for (int i = 0; i < MAX_WAVES; i++) {
     if (i < line_count) {
       strcpy(loaded_waves[i].objects, lines[i]);
+      loaded_waves[i].complete = false;
     }
     loaded_waves[i].active = i < line_count;
   }
@@ -133,6 +140,7 @@ void wvs_NextWave() {
     }
     if (!loaded_waves[current_wave].active) {
       printf("waves done\n");
+      done_looping = true;
       return;
     }
   }
@@ -152,7 +160,7 @@ void wvs_NextWave() {
   }
 }
 
-void wvs_Init() { wvs_LoadLevel("1.txt"); }
+void wvs_Init() {}
 
 void wvs_Reload_Level() { wvs_LoadLevel(currentLevelName); }
 

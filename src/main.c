@@ -80,8 +80,7 @@ int TitleScreen() {
 // TODO use this
 void PlayLevel(char *levelname) {
   wvs_LoadLevel(levelname);
-  bool looping = true;
-  while (!WindowShouldClose()) {
+  while (!WindowShouldClose() && !done_looping) {
     moveBullets(GetFrameTime(), GAME_WIDTH, GAME_HEIGHT);
     bool active_enemies = enm_Update(GetFrameTime());
     bul_Update(GetFrameTime(), GAME_WIDTH, GAME_HEIGHT);

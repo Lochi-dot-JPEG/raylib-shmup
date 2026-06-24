@@ -4,6 +4,7 @@
 #include "wavetype.h"
 #include <raylib.h>
 
+extern bool done_looping;
 void wvs_Init();
 void wvs_NextWave();
 void wvs_Reload_Level();
