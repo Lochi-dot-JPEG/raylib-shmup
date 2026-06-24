@@ -6,7 +6,7 @@ const char EnemyTypeKeys[][8] = {"shoot", "spray", "dart"};
 const EnemyType EnemyTypes[] = { // Declare all types
     {
         // shoot
-        .Hp = 15,
+        .Hp = 25,
         .Speed = 200,
         .Size = 15,
         .MovePattern = 1,
@@ -17,7 +17,7 @@ const EnemyType EnemyTypes[] = { // Declare all types
     },
     {
         // spray
-        .Hp = 50,
+        .Hp = 75,
         .Speed = 100,
         .Size = 40,
         .MovePattern = 2,
@@ -28,13 +28,13 @@ const EnemyType EnemyTypes[] = { // Declare all types
     },
     {
         // dart
-        .Hp = 15,
-        .Speed = 150,
+        .Hp = 10,
+        .Speed = 100,
         .Size = 15,
         .MovePattern = 3,
         .ShootPattern = 1,
-        .BulletSpeed = 100,
-        .ShootCooldown = 40,
+        .BulletSpeed = 80,
+        .ShootCooldown = 60,
         .TextureLocation = {16, 0, 21, 33},
     }};
 const int EnemyTypeSize = sizeof(EnemyTypeKeys) / sizeof(EnemyTypeKeys[0]);

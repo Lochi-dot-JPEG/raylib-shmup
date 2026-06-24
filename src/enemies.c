@@ -1,6 +1,7 @@
 #include "bullets.h"
 #include "bullettype.h"
 #include "math.h"
+#include "player.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "textures.h"
@@ -85,15 +86,16 @@ void enm_New(Vector2 origin, char *type) {
 
 void CreateEnemyBullets(Enemy enemy) {
 
-  // printf("shoot pattern is %d\n", enemy.shootPattern);
   switch (enemy.shootPattern) {
   case 0: // alternating spray
     Vector2 down_angle = {0, 1};
 #define ALT_SPRAY_SPREAD (1 / 18.0 * PI)
-    Vector2 angles[3] = {{0, 1},
+    Vector2 angles[5] = {{0, 1},
+                         Vector2Rotate(down_angle, ALT_SPRAY_SPREAD * 2),
+                         Vector2Rotate(down_angle, -ALT_SPRAY_SPREAD * 2),
                          Vector2Rotate(down_angle, ALT_SPRAY_SPREAD),
                          Vector2Rotate(down_angle, -ALT_SPRAY_SPREAD)};
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 5; i++) {
       Vector2 bulVelo = {angles[i].x * enemy.bulletSpeed,
                          angles[i].y * enemy.bulletSpeed};
       createBulletAtPoint(enemy.position, bulVelo, false);
@@ -147,6 +149,7 @@ void Collide_Bullets(Enemy *enemy) {
         enemy->disabled = true;
       }
       b->disabled = true;
+      combo++;
     }
   }
 }
@@ -168,22 +171,26 @@ bool enm_Update(float delta) {
       break;
     case 1:
       target_position.x += sinf(enemy_offset_time * 4) * 24;
+      enemies[i].position =
+          Vector2MoveTowards(e->position, target_position, e->speed * delta);
       break;
     case 2:
       target_position.x += sinf(enemy_offset_time * 2) * 24;
       target_position.y += cosf(enemy_offset_time * 2) * 24;
+      enemies[i].position =
+          Vector2MoveTowards(e->position, target_position, e->speed * delta);
       break;
     case 3:
-      e->main_position.y += delta * e->speed;
+      e->main_position.y +=
+          delta * e->speed * (1 + 0.2 * sinf(enemy_offset_time * 3));
+      e->position.y +=
+          delta * e->speed * (1 + 0.2 * sinf(enemy_offset_time * 3));
       break;
     }
     if (e->position.y > GAME_HEIGHT + 16) {
       e->disabled = true;
-      printf("disabled");
     }
 
-    enemies[i].position =
-        Vector2MoveTowards(e->position, target_position, e->speed * delta);
     Collide_Bullets(e);
     e->shootTimer--;
     if (e->shootTimer <= 0) {

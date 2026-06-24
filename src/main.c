@@ -104,6 +104,7 @@ void PlayLevel(char *levelname) {
     bul_Draw();
     ply_Draw();
     dlg_Draw();
+    ply_DrawUI();
     EndTextureMode();
     DrawToWindow(pixel_render_target);
   }
@@ -132,10 +133,10 @@ int main() {
       PlayLevel("1.txt");
       break;
     case 1:
-      printf("level 2");
+      PlayLevel("2.txt");
       break;
     case 2:
-      printf("level 3");
+      PlayLevel("3.txt");
       break;
     case 3:
       ToggleFullscreen();

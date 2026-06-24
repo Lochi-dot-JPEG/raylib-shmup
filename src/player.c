@@ -1,5 +1,7 @@
 // Frames until a new bullet is made
+#include "player.h"
 #include "bullettype.h"
+#include "colors.h"
 #include "textures.h"
 #include <bullets.h>
 #include <raylib.h>
@@ -12,24 +14,23 @@
 #define PLAYER_BULLET_SPEED 600
 
 static int shooting = 0;
-static int hp = 10;
+static int hp = 5;
 bool can_shoot = true;
-int max_hp = 10;
+int max_hp = 5;
+int combo = 0;
 Rectangle texture_location = {0, 0, 14, 24};
 
-Texture wabbit;
 Vector2 wabbit_size;
 
 bool focus_mode = false;
 Vector2 wabbitPos = {0, 0};
-int wabbitSpeed = 500;
+int wabbitSpeed = 200;
 Vector2 bulletDirections[3] = {{0.070, -0.997}, {0, -1}, {-0.070, -0.997}};
 Vector2 focusBulletDirections[3] = {{0.035, -0.999}, {0, -1}, {-0.035, -0.999}};
 float bulletOffsets[3] = {8, 0, -8};
 
 void ply_Init() {
-  wabbit = LoadTexture("wabbit_alpha.png");
-  wabbit_size = (Vector2){wabbit.width, wabbit.height};
+  wabbit_size = (Vector2){14, 24};
   wabbitPos = (Vector2){GAME_WIDTH / 2.0,
                         GAME_HEIGHT - PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP};
 }
@@ -59,8 +60,8 @@ void createPlayerBullets(Vector2 playerPos, float delta, bool focused) {
 }
 
 void ply_Draw() {
-  Rectangle location_rec = {(int)wabbitPos.x - 7, (int)wabbitPos.y - 12, 14,
-                            24};
+  Rectangle location_rec = {(int)wabbitPos.x - 7, (int)wabbitPos.y - 12,
+                            wabbit_size.x, wabbit_size.y};
   DrawTexturePro(texture_map, texture_location, location_rec, origin_vec, 0,
                  WHITE);
   // DrawTexture(texture_map, (int)wabbitPos.x, (int)wabbitPos.y, WHITE);
@@ -111,6 +112,7 @@ void ply_Update() {
     if (CheckCollisionCircles(bullets[b].position, bullets[b].radius, wabbitPos,
                               5)) {
       bullets[b].disabled = true;
+      combo = 0;
       hp -= 1;
       if (hp < 1) {
         Die();
@@ -119,6 +121,14 @@ void ply_Update() {
   }
 }
 
-void ply_Unload() {
-  UnloadTexture(wabbit);
-} // TODO create a textures loading file
+void ply_Unload() {}
+
+void ply_DrawUI() {
+  for (int i = 0; i < hp; i++) {
+    DrawRectangle(8, 8 + i * 20, 16, 16, background_color);
+  }
+
+  char text[8] = "";
+  sprintf(text, "%d", combo);
+  DrawText(text, GAME_WIDTH - 32, 0, 16, text_color);
+}

@@ -10,11 +10,14 @@
 #include <waves.h>
 #include <windowscale.h>
 
+#define COMBO_TIER_SIZE 20
+
+extern int combo;
 extern bool can_shoot;
 
 void ply_Init();
 void ply_Draw();
 void ply_Update();
 void ply_Unload();
-
+void ply_DrawUI();
 #endif
