@@ -29,6 +29,8 @@ Vector2 bulletDirections[3] = {{0.070, -0.997}, {0, -1}, {-0.070, -0.997}};
 Vector2 focusBulletDirections[3] = {{0.035, -0.999}, {0, -1}, {-0.035, -0.999}};
 float bulletOffsets[3] = {8, 0, -8};
 
+int GetComboLevel() { return combo / COMBO_TIER_SIZE; }
+
 void ply_Init() {
   wabbit_size = (Vector2){14, 24};
   wabbitPos = (Vector2){GAME_WIDTH / 2.0,
@@ -128,7 +130,15 @@ void ply_DrawUI() {
     DrawRectangle(8, 8 + i * 20, 16, 16, background_color);
   }
 
-  char text[8] = "";
-  sprintf(text, "%d", combo);
-  DrawText(text, GAME_WIDTH - 32, 0, 16, text_color);
+  if (combo > 0) {
+    char text[8] = "";
+    sprintf(text, "%dx", combo);
+    char leveltext[8] = "";
+    sprintf(leveltext, "%dx", GetComboLevel());
+
+    DrawText("Combo", GAME_WIDTH - 48, 8, 16, text_color);
+    DrawText(text, GAME_WIDTH - 48, 32, 16, text_color);
+    DrawText("Power", GAME_WIDTH - 48, 48, 16, text_color);
+    DrawText(leveltext, GAME_WIDTH - 48, 64, 16, text_color);
+  }
 }
