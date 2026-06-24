@@ -2,23 +2,13 @@ disallowshoot
 scrollstop
 say f "Hello???
 say f "Wake up!!
-allowshoot
-dart 100 50
-disallowshoot
 say m "What's happening here? Who are you?
 say f "I'm Finkly. What you would call a fairy.
 say f "You've been rotting in your house for a week straight...
 say m "I miss a single week and the sky goes red?
-say f "Did you not hear and of the impacts?
-say m "The what?
-say f "A bunch of alien vampires crash landed here a couple of days ago.
-say f "I followed close behind to recruit people like you to fight too.
-say f "The population has been decimated, but a few lucky people like you remain.
-say m "I wouldn't exactly call this situation lucky...
-say f "I've been waiting here for long enough for you to wake up.
-say f "You've gotta help me no matter what. It's not like you have any other options.
-say m "Actually I might just go back to bed. Have fun fighting those vampires yourself!
-say f "Actually yes you will.
+say f "Yes but I really need your help right now.
+say m "Actually I might just go back to bed. Bye bye!
+say f "Actually you don't have a choice in this.
 scrollstart
 say m "WHAT HOW AM I MOVING?!
 say f "Magic! I making you fly.
@@ -28,17 +18,22 @@ say m "Can you kill things with your little magic wand?
 say f "No. I don't have magic for fighting people. You can take this blaster though.
 say f "Watch out there's a hoard of vampires approaching!
 say f "Press z or j to shoot, and arrow keys or wasd to move
+say m "Vampires?!
 allowshoot
 shoot 100 50
-shoot 140 50,shoot 200 80
-shoot 80 60,shoot 210 80
+shoot 80 50,shoot 170 80
+shoot 90 60,shoot 110 80
 scrollstop
 disallowshoot
 say m "You didn't even help me??
 say f "My kind isn't physically able to cause direct harm to other creatures, even if they're vampires.
 say f "Plus... don't you feel more accomplished doing it yourself?
+say f "You can also use shift or k to slow down your movement if you're having trouble avoiding those guys.
 say m "I guess so.
 allowshoot
 scrollstart
-spray 200 150
-spray 100 50,shoot 250 80
+spray 120 150
+shoot 80 60,shoot 180 80
+spray 120 50,shoot 150 80,shoot 50 80
+say f "Nice work
+say f "Let's continue on

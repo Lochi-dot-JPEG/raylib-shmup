@@ -1,0 +1,27 @@
+disallowshoot
+scrollstop
+say f "Did you not hear and of the impacts when you were asleep?
+say m "The what?
+say f "A bunch of alien vampires crash landed here a couple of days ago.
+say f "I followed close behind to recruit people like you to fight too.
+say f "The population has been decimated, but a few lucky people like you remain.
+say m "I wouldn't exactly call this situation lucky...
+say f "I've been waiting here for long enough for you to wake up.
+say f "You've gotta help me no matter what. It's not like you have any other options.
+scrollstart
+say f "Now let's continue on to the first barricade
+say m "I don't think I'll ever get used to flying...
+allowshoot
+dart 40 0,dart 80 50,dart 120 0,dart 160 0,dart 200 0
+dart 20 0,dart 60 50,dart 100 0,dart 140 0,dart 180 0,shoot 120 50
+dart 80 0,dart 100 0,dart 120 0,dart 180 0,dart 200 0,dart 220 0
+dart 20 0,dart 40 0,dart 60 0,dart 80 0,dart 100 0,dart 120 0,dart 140 0,dart 160 0
+dart 100 0,dart 140 0,dart 180 0,shoot 120 50,shoot 120 50
+dart 100 0,dart 140 0,dart 180 0,shoot 20 50,spray 120 30
+disallowshoot
+allowshoot
+shoot 100 50,shoot 140 50,shoot 190 80
+shoot 80 60,shoot 210 80,dart 120 0
+spray 200 150
+spray 100 50,shoot 250 80
+dart 100 0,dart 140 0,dart 180 0,shoot 120 60,shoot 20 50,spray 120 30
