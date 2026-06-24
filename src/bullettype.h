@@ -3,7 +3,6 @@
 
 #include "raylib.h"
 
-#define BULLET_RADIUS 5 // TODO remove this and define bullet types
 #define MAX_BULLETS 10000
 typedef struct Bullet {
   Vector2 position;
@@ -13,6 +12,7 @@ typedef struct Bullet {
   bool friendly;
   int damage; /* TODO implement*/
   int radius;
+  Rectangle textureSource;
 } Bullet;
 
 extern Bullet *bullets;

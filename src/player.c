@@ -19,6 +19,8 @@ bool can_shoot = true;
 int max_hp = 5;
 int combo = 0;
 Rectangle texture_location = {0, 0, 14, 24};
+Vector2 origin;
+Color focusHitboxColor;
 
 Vector2 wabbit_size;
 
@@ -32,9 +34,12 @@ float bulletOffsets[3] = {8, 0, -8};
 int GetComboLevel() { return combo / COMBO_TIER_SIZE; }
 
 void ply_Init() {
-  wabbit_size = (Vector2){14, 24};
   wabbitPos = (Vector2){GAME_WIDTH / 2.0,
                         GAME_HEIGHT - PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP};
+
+  focusHitboxColor = GetColor(0xd3a6a6ab);
+  wabbit_size = (Vector2){texture_location.width, texture_location.height};
+  origin = (Vector2){texture_location.width / 2, texture_location.height / 2};
 }
 void Die() {
   wvs_Reload_Level();
@@ -44,29 +49,51 @@ void Die() {
 }
 
 void createPlayerBullets(Vector2 playerPos, float delta, bool focused) {
-  for (int i = 0; i < 3; i++) {
+  switch (GetComboLevel()) {
+  case 0:
+    Vector2 dir0 = {0, -PLAYER_BULLET_SPEED};
+    createBulletAtPoint(playerPos, dir0, true);
+    break;
 
-    Vector2 pos = playerPos;
-    pos.x += bulletOffsets[i];
+    break;
+  case 1:
+    Vector2 pos1a = playerPos;
+    Vector2 pos1b = playerPos;
+    pos1a.x += 10;
+    pos1b.x -= 10;
 
-    Vector2 dir;
-    if (focused) {
-      dir = (Vector2){focusBulletDirections[i].x * PLAYER_BULLET_SPEED,
-                      focusBulletDirections[i].y * PLAYER_BULLET_SPEED};
-    } else {
-      dir = (Vector2){bulletDirections[i].x * PLAYER_BULLET_SPEED,
-                      bulletDirections[i].y * PLAYER_BULLET_SPEED};
+    Vector2 dir1 = {0, -PLAYER_BULLET_SPEED};
+    createBulletAtPoint(pos1a, dir1, true);
+    createBulletAtPoint(pos1b, dir1, true);
+    break;
+  default:
+    for (int i = 0; i < 3; i++) {
+
+      Vector2 pos = playerPos;
+      pos.x += bulletOffsets[i];
+
+      Vector2 dir;
+      if (focused) {
+        dir = (Vector2){focusBulletDirections[i].x * PLAYER_BULLET_SPEED,
+                        focusBulletDirections[i].y * PLAYER_BULLET_SPEED};
+      } else {
+        dir = (Vector2){bulletDirections[i].x * PLAYER_BULLET_SPEED,
+                        bulletDirections[i].y * PLAYER_BULLET_SPEED};
+      }
+      createBulletAtPoint(pos, dir, true);
     }
-    createBulletAtPoint(pos, dir, true);
+    break;
   }
 }
 
 void ply_Draw() {
-  Rectangle location_rec = {(int)wabbitPos.x - 7, (int)wabbitPos.y - 12,
-                            wabbit_size.x, wabbit_size.y};
-  DrawTexturePro(texture_map, texture_location, location_rec, origin_vec, 0,
-                 WHITE);
-  // DrawTexture(texture_map, (int)wabbitPos.x, (int)wabbitPos.y, WHITE);
+  Rectangle location_rec = {(int)wabbitPos.x, (int)wabbitPos.y, wabbit_size.x,
+                            wabbit_size.y};
+  DrawTexturePro(texture_map, texture_location, location_rec, origin, 0, WHITE);
+  if (focus_mode) {
+    DrawCircleLinesV(wabbitPos, 5, focusHitboxColor);
+  }
+
   char str[8];
   snprintf(str, sizeof(str), "%d", hp);
   DrawText(str, 360 - 95, 80, 20, WHITE);
@@ -78,7 +105,7 @@ void ply_Update() {
   if (can_shoot) {
     if (IsKeyDown(KEY_J) || IsKeyDown(KEY_Z)) {
       if (shooting == 5) {
-        Vector2 pos = {wabbitPos.x + wabbit_size.x / 2, wabbitPos.y};
+        Vector2 pos = {wabbitPos.x, wabbitPos.y};
         createPlayerBullets(pos, GetFrameTime(), focus_mode);
         shooting = 0;
       }

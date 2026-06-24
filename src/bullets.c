@@ -1,5 +1,6 @@
 #include "bullettype.h"
 #include "raylib.h"
+#include "textures.h"
 #include <stdio.h>
 #include <stdlib.h>
 float bulletSpeed = 200.0f;
@@ -48,9 +49,15 @@ Bullet *createBulletAtPoint(Vector2 origin, Vector2 velocity, bool friendly) {
   bullets[foundIndex].velocity.x = velocity.x;
   bullets[foundIndex].velocity.y = velocity.y;
   bullets[foundIndex].color = RED;
-  bullets[foundIndex].radius = BULLET_RADIUS;
   bullets[foundIndex].disabled = false;
   bullets[foundIndex].friendly = friendly;
+  if (friendly) {
+    bullets[foundIndex].radius = 7;
+    bullets[foundIndex].textureSource = (Rectangle){12, 33, 16, 16};
+  } else {
+    bullets[foundIndex].radius = 5;
+    bullets[foundIndex].textureSource = (Rectangle){0, 32, 12, 12};
+  }
   return &bullets[foundIndex];
 }
 
@@ -62,8 +69,13 @@ void bul_Draw() {
       continue;
     }
     drawnBullets++;
-    Vector2 pos = bullets[i].position;
-    DrawCircle(pos.x, pos.y, bullets[i].radius, bullets[i].color);
+    Bullet b = bullets[i];
+    int pos_radius = b.textureSource.width;
+    int half_pos_radius = pos_radius / 2;
+    Rectangle pos = {b.position.x, b.position.y, pos_radius, pos_radius};
+    Vector2 origin = {half_pos_radius, half_pos_radius};
+    DrawTexturePro(texture_map, b.textureSource, pos, origin, 0, WHITE);
+    // DrawCircle(pos.x, pos.y, bullets[i].radius, bullets[i].color);
   }
   char str[8];
   snprintf(str, sizeof(str), "%d", drawnBullets);
