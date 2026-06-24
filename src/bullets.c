@@ -1,5 +1,6 @@
 #include "bullettype.h"
 #include "raylib.h"
+#include "raymath.h"
 #include "textures.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -72,7 +73,8 @@ void bul_Draw() {
     Bullet b = bullets[i];
     int pos_radius = b.textureSource.width;
     int half_pos_radius = pos_radius / 2;
-    Rectangle pos = {b.position.x, b.position.y, pos_radius, pos_radius};
+    Rectangle pos = {round(b.position.x), round(b.position.y), pos_radius,
+                     pos_radius};
     Vector2 origin = {half_pos_radius, half_pos_radius};
     DrawTexturePro(texture_map, b.textureSource, pos, origin, 0, WHITE);
     // DrawCircle(pos.x, pos.y, bullets[i].radius, bullets[i].color);

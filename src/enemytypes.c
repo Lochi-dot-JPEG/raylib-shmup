@@ -17,7 +17,7 @@ const EnemyType EnemyTypes[] = { // Declare all types
     },
     {
         // spray
-        .Hp = 75,
+        .Hp = 80,
         .Speed = 100,
         .Size = 40,
         .MovePattern = 2,

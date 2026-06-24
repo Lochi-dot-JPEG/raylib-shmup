@@ -125,10 +125,11 @@ void enm_Draw() {
     if (e.disabled) {
       continue;
     }
-    Rectangle location_rec = {e.position.x, e.position.y, e.texture_rect.width,
-                              e.texture_rect.height};
+    Rectangle location_rec = {round(e.position.x), round(e.position.y),
+                              e.texture_rect.width, e.texture_rect.height};
 
-    Vector2 origin = {e.texture_rect.width / 2, e.texture_rect.height / 2};
+    Vector2 origin = {round(e.texture_rect.width / 2.0),
+                      round(e.texture_rect.height / 2.0)};
 
     // DrawCircle((int)e.position.x, (int)e.position.y, e.size, PURPLE);
     DrawTexturePro(texture_map, e.texture_rect, location_rec, origin, 0, WHITE);
