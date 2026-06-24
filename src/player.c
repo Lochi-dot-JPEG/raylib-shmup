@@ -14,9 +14,9 @@
 #define PLAYER_BULLET_SPEED 600
 
 static int shooting = 0;
-static int hp = 5;
 bool can_shoot = true;
-int max_hp = 5;
+#define MAX_HP 15
+static int hp = MAX_HP;
 int combo = 0;
 Rectangle texture_location = {0, 0, 14, 24};
 Vector2 origin;
@@ -45,7 +45,7 @@ void Die() {
   wvs_Reload_Level();
   wabbitPos = (Vector2){GAME_WIDTH / 2.0,
                         GAME_HEIGHT - PLAYER_SPAWN_BOTTOM_OF_SCREEN_GAP};
-  hp = max_hp;
+  hp = MAX_HP;
 }
 
 void createPlayerBullets(Vector2 playerPos, float delta, bool focused) {
@@ -154,7 +154,7 @@ void ply_Unload() {}
 
 void ply_DrawUI() {
   for (int i = 0; i < hp; i++) {
-    DrawRectangle(8, 8 + i * 20, 16, 16, background_color);
+    DrawRectangle(8, 8 + i * 8, 16, 4, background_color);
   }
 
   if (combo > 0) {
