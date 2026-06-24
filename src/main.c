@@ -148,6 +148,8 @@ int main() {
       break;
     }
   }
+
+  tex_Unload();
 }
 
 #endif
