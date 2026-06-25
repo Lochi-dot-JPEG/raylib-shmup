@@ -33,7 +33,13 @@ This was my first experience learning and using both the c programming language 
 
 ## Screenshots
 
-TODO
+![screenshot 1](screenshots/01-ss.png)
+
+![screenshot 2](screenshots/02-ss.png)
+
+![screenshot 3](screenshots/03-ss.png)
+
+![screenshot 4](screenshots/04-ss.png)
 
 ## Level Format
 

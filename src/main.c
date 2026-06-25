@@ -29,6 +29,8 @@ bool Quitting = false;
   "J or Z | Shoot\n\n"                                                         \
   "Shift or K | Focus Mode (slows you down and focuses bullets)\n\n"           \
   "Escape | Quit level\n\n"                                                    \
+  "With every increase of 30 in combo, you shoot more bullets.\n\n"            \
+  "Getting hit will break your combo and thus your bullet count.\n\n"          \
   "Press enter to close\n\n"
 
 void Tutorial() {
