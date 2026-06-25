@@ -147,6 +147,11 @@ void wvs_NextWave() {
   loaded_waves[current_wave].complete = true;
   current_wave++;
 
+  if (!loaded_waves[current_wave].active) {
+    printf("waves done\n");
+    done_looping = true;
+    return;
+  }
   if (strstr(loaded_waves[current_wave].objects, "say")) {
     if (active_bullets == 0) {
       LoadLevelWave(loaded_waves[current_wave]);
