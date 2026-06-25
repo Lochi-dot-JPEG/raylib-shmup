@@ -28,14 +28,14 @@ const EnemyType EnemyTypes[] = { // Declare all types
     },
     {
         // dart
-        .Hp = 10,
+        .Hp = 6,
         .Speed = 100,
         .Size = 15,
         .MovePattern = 3,
         .ShootPattern = 1,
         .BulletSpeed = 80,
         .ShootCooldown = 60,
-        .TextureLocation = {16, 0, 21, 33},
+        .TextureLocation = {0, 49, 25, 23},
     }};
 const int EnemyTypeSize = sizeof(EnemyTypeKeys) / sizeof(EnemyTypeKeys[0]);
 
