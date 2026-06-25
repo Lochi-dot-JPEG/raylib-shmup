@@ -129,8 +129,8 @@ void ply_Update() {
   if (IsKeyDown(KEY_DOWN) || IsKeyDown(KEY_S)) {
     wabbitPos.y += current_speed * GetFrameTime();
   }
-  wabbitPos.x = Clamp(wabbitPos.x, 0, GAME_WIDTH - wabbit_size.x);
-  wabbitPos.y = Clamp(wabbitPos.y, 0, GAME_HEIGHT - wabbit_size.y);
+  wabbitPos.x = Clamp(wabbitPos.x, 0, GAME_WIDTH);
+  wabbitPos.y = Clamp(wabbitPos.y, 0, GAME_HEIGHT);
 
   Rectangle rec = {wabbitPos.x, wabbitPos.y, wabbit_size.x, wabbit_size.y};
   for (int b = 0; b < MAX_BULLETS; b++) {
