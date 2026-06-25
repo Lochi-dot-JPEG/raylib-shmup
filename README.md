@@ -61,6 +61,10 @@ This level code disables shooting, stops the screen and says first from the char
 
 Each line defining types of enemies, separate each enemy with a comma. The first word chooses a type (defined in enemytypes.c) the other two values are x and y positions.
 
-## TODO
+## Tested Platforms
 
-your README, write a tiny table: platform, arch, tested OS version, and which one you tested most thoroughly
+Tested most thoroughly on Arch Linux.
+
+| Platform   | Arch | Tested os version   |
+| ---------- | ---- | ------------------- |
+| Arch Linux | x86  | Up-to-date 25/06/26 |
