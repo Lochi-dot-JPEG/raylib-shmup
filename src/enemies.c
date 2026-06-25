@@ -89,7 +89,7 @@ void CreateEnemyBullets(Enemy enemy) {
   switch (enemy.shootPattern) {
   case 0: // alternating spray
     Vector2 down_angle = {0, 1};
-#define ALT_SPRAY_SPREAD (1 / 18.0 * PI)
+#define ALT_SPRAY_SPREAD (1 / 12.0 * PI)
     Vector2 angles[5] = {{0, 1},
                          Vector2Rotate(down_angle, ALT_SPRAY_SPREAD * 2),
                          Vector2Rotate(down_angle, -ALT_SPRAY_SPREAD * 2),
@@ -186,9 +186,15 @@ bool enm_Update(float delta) {
           delta * e->speed * (1 + 0.2 * sinf(enemy_offset_time * 3));
       e->position.y +=
           delta * e->speed * (1 + 0.2 * sinf(enemy_offset_time * 3));
+      if (e->position.y > GAME_HEIGHT - 16 && e->speed > 0) {
+        e->speed = -e->speed;
+      }
+      if (e->position.y < 16 && e->speed < 0) {
+        e->speed = -e->speed;
+      }
       break;
     }
-    if (e->position.y > GAME_HEIGHT + 16) {
+    if (e->position.y > GAME_HEIGHT + 32) {
       e->disabled = true;
     }
 
