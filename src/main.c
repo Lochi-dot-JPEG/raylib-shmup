@@ -20,6 +20,7 @@ RenderTexture2D pixel_render_target;
 #define BUTTON_GAP 16
 #define BUTTON_COUNT 6
 int title_selected = 0;
+bool Quitting = false;
 void Tutorial() {
   bool unpressed = false;
   Rectangle tutorial_rect = {8, 8, pixel_render_target.texture.width - 16,
@@ -41,6 +42,10 @@ void Tutorial() {
     EndTextureMode();
     DrawToWindow(pixel_render_target);
   }
+}
+void Quit() {
+  tex_Unload();
+  Quitting = true;
 }
 int TitleScreen() {
   bool unpressed = false;
@@ -122,7 +127,11 @@ void PlayLevel(char *levelname) {
       done_looping = true;
     }
   }
-  LevelEnd();
+  if (WindowShouldClose()) {
+    Quit();
+  } else {
+    LevelEnd();
+  }
 }
 
 int main() {
@@ -142,7 +151,7 @@ int main() {
   pixel_render_target = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
 
   SetExitKey(KEY_F1);
-  while (!WindowShouldClose()) {
+  while (!WindowShouldClose() && !Quitting) {
     int title_result = TitleScreen();
     switch (title_result) {
     case 0:
@@ -166,7 +175,7 @@ int main() {
     }
   }
 
-  tex_Unload();
+  Quit();
 }
 
 #endif

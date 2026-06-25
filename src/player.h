@@ -10,7 +10,7 @@
 #include <waves.h>
 #include <windowscale.h>
 
-#define COMBO_TIER_SIZE 50
+#define COMBO_TIER_SIZE 30
 
 extern int combo;
 extern bool can_shoot;
