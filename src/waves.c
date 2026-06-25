@@ -130,7 +130,6 @@ void wvs_LoadLevel(char *level_name) {
   UnloadFileText(level_data);
 }
 
-// TODO
 void UnloadLevel(char *level_text) { UnloadFileText(level_text); }
 
 void wvs_NextWave() {

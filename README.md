@@ -6,12 +6,6 @@ A shoot em up game made in c using raylib.
 
 This was my first experience learning and using both the c programming language and the raylib game framework.
 
-## Technologies
-
-- [Raylib](https://www.raylib.com/)
-- C
-- [jsfxr sound effects](https://sfxr.me/)
-
 ## Features
 
 - Dialogue system with a story
@@ -68,3 +62,13 @@ Tested most thoroughly on Arch Linux.
 | Platform   | Arch | Tested os version   |
 | ---------- | ---- | ------------------- |
 | Arch Linux | x86  | Up-to-date 25/06/26 |
+
+## Technologies
+
+- [Raylib](https://www.raylib.com/)
+- C
+- [jsfxr sound effects](https://sfxr.me/)
+
+## AI Use
+
+No ai was used in this project. Some code was used from raylib's examples.
