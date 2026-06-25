@@ -2,6 +2,7 @@
 #include "player.h"
 #include "bullettype.h"
 #include "colors.h"
+#include "sounds.h"
 #include "textures.h"
 #include <bullets.h>
 #include <raylib.h>
@@ -18,6 +19,10 @@ bool can_shoot = true;
 #define MAX_HP 15
 static int hp = MAX_HP;
 int combo = 0;
+int last_tier = 0;
+int max_combo = 0;
+int score = 0;
+
 Rectangle texture_location = {0, 0, 14, 24};
 Vector2 origin;
 Color focusHitboxColor;
@@ -30,8 +35,20 @@ int wabbitSpeed = 200;
 Vector2 bulletDirections[3] = {{0.070, -0.997}, {0, -1}, {-0.070, -0.997}};
 Vector2 focusBulletDirections[3] = {{0.035, -0.999}, {0, -1}, {-0.035, -0.999}};
 float bulletOffsets[3] = {8, 0, -8};
+int GetScore() { return max_combo * 10 - MAX_HP - hp * 1000; }
 
-int GetComboLevel() { return combo / COMBO_TIER_SIZE; }
+int GetComboLevel() {
+  if (combo > max_combo) {
+    max_combo = combo;
+  }
+  int combo_level = combo / COMBO_TIER_SIZE;
+  int new_tier = Clamp(combo_level, 0, 2);
+  if (last_tier != new_tier && new_tier != 0) {
+    last_tier = new_tier;
+    PlaySound(snd_power_up);
+  }
+  return new_tier;
+}
 
 void ply_Init() {
   wabbitPos = (Vector2){GAME_WIDTH / 2.0,
@@ -49,6 +66,7 @@ void Die() {
 }
 
 void createPlayerBullets(Vector2 playerPos, float delta, bool focused) {
+  PlaySound(snd_player_shoot);
   switch (GetComboLevel()) {
   case 0:
     Vector2 dir0 = {0, -PLAYER_BULLET_SPEED};
@@ -143,6 +161,7 @@ void ply_Update() {
       bullets[b].disabled = true;
       combo = 0;
       hp -= 1;
+      PlaySound(snd_hurt);
       if (hp < 1) {
         Die();
       }
@@ -157,15 +176,24 @@ void ply_DrawUI() {
     DrawRectangle(8, 8 + i * 8, 16, 4, background_color);
   }
 
-  if (combo > 0) {
-    char text[8] = "";
-    sprintf(text, "%dx", combo);
-    char leveltext[8] = "";
-    sprintf(leveltext, "%dx", GetComboLevel());
+  // char scoretext[9] = "";
+  // sprintf(scoretext, "%d", GetScore());
+  // DrawText(scoretext, GAME_WIDTH - 48, 8, 8, text_color);
 
-    DrawText("Combo", GAME_WIDTH - 48, 8, 16, text_color);
-    DrawText(text, GAME_WIDTH - 48, 32, 16, text_color);
-    DrawText("Power", GAME_WIDTH - 48, 48, 16, text_color);
-    DrawText(leveltext, GAME_WIDTH - 48, 64, 16, text_color);
-  }
+  char text[8] = "";
+  sprintf(text, "%dx", combo);
+  char leveltext[8] = "";
+  sprintf(leveltext, "%dx", GetComboLevel() + 1);
+
+  DrawText("Combo", GAME_WIDTH - 48, 8, 16, text_color);
+  DrawText(text, GAME_WIDTH - 48, 32, 16, text_color);
+  DrawText("Power", GAME_WIDTH - 48, 48, 16, text_color);
+  DrawText(leveltext, GAME_WIDTH - 48, 64, 16, text_color);
+}
+
+void ply_Reset() {
+  combo = 0;
+  max_combo = 0;
+  score = 0;
+  hp = MAX_HP;
 }

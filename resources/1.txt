@@ -13,9 +13,9 @@ scrollstart
 say m "WHAT HOW AM I MOVING?!
 say f "Magic! I making you fly.
 say m "That's great and all but I still don't know how to fight.
-say m "Do you have any magic for that? 
+say m "Do you have any magic for that?
 say m "Can you kill things with your little magic wand?
-say f "No. I don't have magic for fighting people. You can take this blaster though.
+say f "No. I don't have magic for fighting people. You can use this blaster though.
 say f "Watch out there's a hoard of vampires approaching!
 say f "Press z or j to shoot, and arrow keys or wasd to move
 say m "Vampires?!

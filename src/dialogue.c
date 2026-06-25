@@ -2,6 +2,7 @@
 #include "colors.h"
 #include "raylib.h"
 #include "raymath.h"
+#include "sounds.h"
 #include "stdio.h"
 #include "textures.h"
 #include "windowscale.h"
@@ -29,6 +30,14 @@ void StartDialogue(char name, char line[512]) {
       nameID = i;
       break;
     }
+  }
+  switch (name) {
+  case 'f':
+    PlaySound(snd_say_f);
+    break;
+  case 'm':
+    PlaySound(snd_say_m);
+    break;
   }
 
   printf("line is %s", line); // Data is broken here
@@ -59,6 +68,4 @@ void dlg_Draw() {
                                   128};
   DrawTextBoxed(GetFontDefault(), current_line, dialogue_line_rect, 10, 2,
                 text_color);
-  // TODO wrap text using raylib example
-  // DrawText(current_line, DIALOGUE_POS_X, DIALOGUE_POS_Y, 10, WHITE);
 }

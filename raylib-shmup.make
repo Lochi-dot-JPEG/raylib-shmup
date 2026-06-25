@@ -126,6 +126,7 @@ GENERATED += $(OBJDIR)/enemies.o
 GENERATED += $(OBJDIR)/enemytypes.o
 GENERATED += $(OBJDIR)/main.o
 GENERATED += $(OBJDIR)/player.o
+GENERATED += $(OBJDIR)/sounds.o
 GENERATED += $(OBJDIR)/textures.o
 GENERATED += $(OBJDIR)/waves.o
 GENERATED += $(OBJDIR)/windowscale.o
@@ -138,6 +139,7 @@ OBJECTS += $(OBJDIR)/enemies.o
 OBJECTS += $(OBJDIR)/enemytypes.o
 OBJECTS += $(OBJDIR)/main.o
 OBJECTS += $(OBJDIR)/player.o
+OBJECTS += $(OBJDIR)/sounds.o
 OBJECTS += $(OBJDIR)/textures.o
 OBJECTS += $(OBJDIR)/waves.o
 OBJECTS += $(OBJDIR)/windowscale.o
@@ -179,7 +181,7 @@ ifeq (posix,$(SHELLTYPE))
 	$(SILENT) rm -rf $(OBJDIR)
 else
 	$(SILENT) if exist $(subst /,\\,$(TARGET)) del $(subst /,\\,$(TARGET))
-	$(SILENT) $(foreach f,$(subst /,\\,$(GENERATED)),if exist $(f) del /s /q $(f) >nul &)
+	$(SILENT) if exist $(subst /,\\,$(GENERATED)) del /s /q $(subst /,\\,$(GENERATED))
 	$(SILENT) if exist $(subst /,\\,$(OBJDIR)) rmdir /s /q $(subst /,\\,$(OBJDIR))
 endif
 
@@ -227,6 +229,9 @@ $(OBJDIR)/main.o: src/main.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/player.o: src/player.c
+	@echo "$(notdir $<)"
+	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/sounds.o: src/sounds.c
 	@echo "$(notdir $<)"
 	$(SILENT) $(CC) $(ALL_CFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/textures.o: src/textures.c

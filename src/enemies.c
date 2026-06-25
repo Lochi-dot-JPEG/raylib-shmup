@@ -4,6 +4,7 @@
 #include "player.h"
 #include "raylib.h"
 #include "raymath.h"
+#include "sounds.h"
 #include "textures.h"
 #include <enemytypes.h>
 #include <raymath.h>
@@ -66,7 +67,6 @@ void enm_New(Vector2 origin, char *type) {
     } else {
       enemies[foundIndex].position.x = origin.x + 20;
     }
-    // enemies[foundIndex].position.x = origin.x;
   }
 
   EnemyType thisType = GetEnemyType(type);
@@ -76,7 +76,8 @@ void enm_New(Vector2 origin, char *type) {
   enemies[foundIndex].size = thisType.Size;
   enemies[foundIndex].shootPattern = thisType.ShootPattern;
   enemies[foundIndex].shootCooldown = thisType.ShootCooldown;
-  enemies[foundIndex].shootTimer = thisType.ShootCooldown;
+  enemies[foundIndex].shootTimer =
+      (float)GetRandomValue(0, thisType.ShootCooldown);
   enemies[foundIndex].bulletSpeed = thisType.BulletSpeed;
   enemies[foundIndex].movePattern = thisType.MovePattern;
   enemies[foundIndex].direction = (Vector2){1, 0.5};
@@ -85,6 +86,7 @@ void enm_New(Vector2 origin, char *type) {
 }
 
 void CreateEnemyBullets(Enemy enemy) {
+  PlaySound(snd_enemy_shoot);
 
   switch (enemy.shootPattern) {
   case 0: // alternating spray
@@ -120,7 +122,6 @@ void CreateEnemyBullets(Enemy enemy) {
 
 void enm_Draw() {
   for (int i = 0; i < MAX_ENEMIES; i++) {
-    // TODO figure out if using a reference here is more optimal
     Enemy e = enemies[i];
     if (e.disabled) {
       continue;
@@ -148,6 +149,9 @@ void Collide_Bullets(Enemy *enemy) {
       enemy->hp -= 1;
       if (enemy->hp <= 0) {
         enemy->disabled = true;
+        PlaySound(snd_kill);
+      } else {
+        PlaySound(snd_hurt);
       }
       b->disabled = true;
       combo++;

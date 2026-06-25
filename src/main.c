@@ -8,6 +8,7 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "resource_dir.h" // utility header for SearchAndSetResourceDir
+#include "sounds.h"
 #include "textures.h"
 #include "windowscale.h"
 #include "word-wrap.h"
@@ -21,23 +22,30 @@ RenderTexture2D pixel_render_target;
 #define BUTTON_COUNT 6
 int title_selected = 0;
 bool Quitting = false;
+
+#define TUTORIAL                                                               \
+  "WASD/Arrow keys | Move, menus\n\n"                                          \
+  "Enter | Confirm and next dialogue\n\n"                                      \
+  "J or Z | Shoot\n\n"                                                         \
+  "Shift or K | Focus Mode (slows you down and focuses bullets)\n\n"           \
+  "Escape | Quit level\n\n"                                                    \
+  "Press enter to close\n\n"
+
 void Tutorial() {
   bool unpressed = false;
   Rectangle tutorial_rect = {8, 8, pixel_render_target.texture.width - 16,
                              pixel_render_target.texture.height - 16};
   while (!WindowShouldClose()) {
     BeginTextureMode(pixel_render_target);
-    ClearBackground(GRAY);
+    ClearBackground(background_color);
     if (unpressed && IsKeyPressed(KEY_ENTER)) {
+      PlaySound(snd_select);
       return;
     }
     if (IsKeyUp(KEY_ENTER)) {
       unpressed = true;
     }
 
-#define TUTORIAL                                                               \
-  "THis is the tutorial textTHis is the tutorial textTHis is the tutorial "    \
-  "textTHis is the tutorial text....THis is the tutorial text."
     DrawTextBoxed(GetFontDefault(), TUTORIAL, tutorial_rect, 10, 2, text_color);
     EndTextureMode();
     DrawToWindow(pixel_render_target);
@@ -45,12 +53,15 @@ void Tutorial() {
 }
 void Quit() {
   tex_Unload();
+
+  CloseAudioDevice();
   Quitting = true;
 }
 int TitleScreen() {
   bool unpressed = false;
-  const char *buttons[BUTTON_COUNT] = {"Level 1",    "Level 2",  "Level 3",
-                                       "Fullscreen", "Tutorial", "Quit"};
+  const char *buttons[BUTTON_COUNT] = {
+      "Level 1",    "Level 2",  "Level 3 (custom level)",
+      "Fullscreen", "Tutorial", "Quit"};
 
   while (!WindowShouldClose()) {
 
@@ -60,11 +71,14 @@ int TitleScreen() {
     DrawText("Apocalypse", 16, 48, 32, text_color);
     if (IsKeyPressed(KEY_W) || IsKeyPressed(KEY_UP)) {
       title_selected = Clamp(title_selected - 1, 0, BUTTON_COUNT - 1);
+      PlaySound(snd_select);
     }
     if (IsKeyPressed(KEY_S) || IsKeyPressed(KEY_DOWN)) {
+      PlaySound(snd_select);
       title_selected = Clamp(title_selected + 1, 0, BUTTON_COUNT - 1);
     }
     if (unpressed && IsKeyPressed(KEY_ENTER)) {
+      PlaySound(snd_select);
       return title_selected;
     }
     if (IsKeyUp(KEY_ENTER)) {
@@ -84,7 +98,7 @@ int TitleScreen() {
 
 void LevelEnd() {
   int frames = 0;
-  while (frames < 60) {
+  while (frames < 120) {
     frames++;
     BeginTextureMode(pixel_render_target);
     ClearBackground(background_color);
@@ -94,7 +108,7 @@ void LevelEnd() {
     DrawToWindow(pixel_render_target);
   }
 }
-// TODO use this
+
 void PlayLevel(char *levelname) {
   wvs_LoadLevel(levelname);
   while (!WindowShouldClose() && !done_looping) {
@@ -140,6 +154,7 @@ int main() {
 
   CreateWindow();
   SearchAndSetResourceDir("resources");
+  InitAudioDevice();
   col_Init();
   enm_Init();
   bul_Init();
@@ -148,6 +163,7 @@ int main() {
   bkg_Init();
   dlg_Init();
   tex_Init();
+  snd_Init();
   pixel_render_target = LoadRenderTexture(GAME_WIDTH, GAME_HEIGHT);
 
   SetExitKey(KEY_F1);

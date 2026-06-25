@@ -89,6 +89,8 @@ void LoadLevelWave(LevelWave newWave) {
 
 void wvs_LoadLevel(char *level_name) {
   done_looping = false;
+  ply_Reset();
+
   scroll_background = true;
   strcpy(currentLevelName, level_name);
   bul_Clear();

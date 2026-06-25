@@ -4,7 +4,7 @@ say m "You can customise this level by editing 3.txt
 say f "See the readme.md file for a guide on making levels 
 say f "Or look at 1.txt and 2.txt
 scrollstart
-say f "Background started scrolling
+say m "Background started scrolling
 allowshoot
 dart 40 0,dart 80 50,dart 120 0,dart 160 0,dart 200 0
 dart 20 0,dart 60 50,dart 100 0,dart 140 0,dart 180 0,shoot 120 50

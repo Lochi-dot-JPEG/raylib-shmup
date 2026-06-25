@@ -13,9 +13,11 @@
 #define COMBO_TIER_SIZE 30
 
 extern int combo;
+extern int score;
 extern bool can_shoot;
 
 void ply_Init();
+void ply_Reset();
 void ply_Draw();
 void ply_Update();
 void ply_Unload();
