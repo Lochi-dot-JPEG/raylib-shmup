@@ -14,12 +14,13 @@
 #include "word-wrap.h"
 #include <dialogue.h>
 #include <stdio.h>
+#include <string.h>
 #include <waves.h>
 
 RenderTexture2D pixel_render_target;
 
 #define BUTTON_GAP 16
-#define BUTTON_COUNT 6
+#define BUTTON_COUNT 7
 int title_selected = 0;
 bool Quitting = false;
 
@@ -31,6 +32,9 @@ bool Quitting = false;
   "Escape | Quit level\n\n"                                                    \
   "With every increase of 30 in combo, you shoot more bullets.\n\n"            \
   "Getting hit will break your combo and thus your bullet count.\n\n"          \
+  "Custom levels are text files dragged onto the screen. You can get a "       \
+  "default one by copying using the title screen button or from finding "      \
+  "resources/3.txt on the github if copy button doesn't work.\n\n"             \
   "Press enter to close\n\n"
 
 void Tutorial() {
@@ -62,8 +66,8 @@ void Quit() {
 int TitleScreen() {
   bool unpressed = false;
   const char *buttons[BUTTON_COUNT] = {
-      "Level 1",    "Level 2",  "Level 3 (custom level)",
-      "Fullscreen", "Tutorial", "Quit"};
+      "Level 1",  "Level 2", "Custom Level",   "Fullscreen",
+      "Tutorial", "Quit",    "Copy test level"};
 
   while (!WindowShouldClose()) {
 
@@ -179,7 +183,30 @@ int main() {
       PlayLevel("2.txt");
       break;
     case 2:
-      PlayLevel("3.txt");
+      char path[512] = "";
+      FilePathList droppedFiles;
+
+      while (!WindowShouldClose()) {
+        if (IsFileDropped()) {
+          droppedFiles = LoadDroppedFiles();
+          TextCopy(path, droppedFiles.paths[0]);
+          break;
+        }
+        if (IsKeyPressed(KEY_ESCAPE)) {
+          break;
+        }
+        BeginTextureMode(pixel_render_target);
+        ClearBackground(background_color);
+        DrawText("Drag and drop a file to play", 8, 8, 16, text_color);
+        DrawText("Press escape to go back", 8, 64, 16, text_color);
+        EndTextureMode();
+        DrawToWindow(pixel_render_target);
+      }
+      if (strcmp(path, "") != 0) {
+        printf("plays 3\n");
+        PlayLevel(path);
+        UnloadDroppedFiles(droppedFiles);
+      }
       break;
     case 3:
       ToggleFullscreen();
@@ -189,6 +216,9 @@ int main() {
       break;
     case 5:
       CloseWindow();
+      break;
+    case 6:
+      SetClipboardText(LoadFileText("3.txt"));
       break;
     }
   }
