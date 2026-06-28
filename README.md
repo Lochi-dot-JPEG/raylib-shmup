@@ -2,6 +2,8 @@
 
 A shoot em up game made in c using raylib.
 
+Web build available on [itch.io](https://lochi-makes-games.itch.io/twilight-apocalypse).
+
 ## Motivation
 
 This was my first experience learning and using both the c programming language and the raylib game framework.
